@@ -1,6 +1,6 @@
 import { Component } from 'preact';
 import Polyphonic from '../Polyphonic';
-import AudioKeys from 'AudioKeys';
+import AudioKeys from '../../AudioKeys/dist/audiokeys.min.js';
 
 export default class Synth extends Component {
     componentWillMount() {

@@ -1,0 +1,3 @@
+[submodule "AudioKeys"]
+	path = AudioKeys
+	url = https://github.com/kylestetz/AudioKeys
