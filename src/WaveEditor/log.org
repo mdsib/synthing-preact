@@ -1,0 +1,5 @@
+* <2017-12-02 Sat 15:46>
+** TODO send mouse events through dom rather than react? Might cause conflicts with events down the line. But it would be more efficient
+/home/mds/code/web/synthing-preact/src/App/index.js::26
+*** add mousemove listener only on click on canvas
+*** remove on mouseup!

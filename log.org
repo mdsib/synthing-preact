@@ -1,0 +1,13 @@
+* things
+** seems like waveEditor works by sending a new waveform array and getting that same thing back as a prop, then checking against the old one and seeing that it's different. Could this be better?
+*** too many props change because of mousemove event bullshit
+*** gotta always check in componentWillReceiveProps if we should compute or not since it isn't guaranteed that any props have changed.
+* <2017-12-02 Sat 15:46>
+** send mouse events through dom rather than react? Might cause conflicts with events down the line. But it would be more efficient
+/home/mds/code/web/synthing-preact/src/App/index.js:26
+*** add mousemove listener only on click on canvas
+*** remove on mouseup!
+*** don't do until necessary
+** the synth
+*** whenever the wave changes, it should be put into the osc node
+*** whenever settings in UI change, they should change the nodes related to those settings.
