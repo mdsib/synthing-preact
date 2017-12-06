@@ -1,6 +1,6 @@
 import { Component } from 'preact';
 import Polyphonic from '../Polyphonic';
-import AudioKeys from '../../AudioKeys/dist/audiokeys.min.js';
+import AudioKeys from '../../AudioKeys/dist/audiokeys.js';
 
 export default class Synth extends Component {
     componentWillMount() {
@@ -10,7 +10,6 @@ export default class Synth extends Component {
         return false;
     }
     componentWillReceiveProps(newProps) {
-        if (this.props.waveform !== newProps.waveform);
         updateAudio(newProps.waveform);
     }
     render() {
@@ -30,7 +29,6 @@ function startAudio() {
     keyboard.up((note) => {
         P.removeVoice(note);
     });
-
 }
 
 function updateAudio(waveform) {

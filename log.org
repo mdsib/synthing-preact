@@ -11,3 +11,10 @@
 ** the synth
 *** whenever the wave changes, it should be put into the osc node
 *** whenever settings in UI change, they should change the nodes related to those settings.
+* <2017-12-03 Sun 19:18>
+** waveform becomes an array
+*** DONE be able to update, remove waveform at idx i
+*** DONE have convenience methods to update "active" waveform, acting the same as before
+*** DONE be able to change active waveform
+* <2017-12-03 Sun 21:35>
+here's an idea: make modules in vanilla js and interact with them via react. We'll get some reusability in other projects and keep react doing viewstuff, not statelogicstuff

@@ -37,6 +37,23 @@ const smoothZoneRange = function (waveData, begin, end) {
 export default class waveEditor extends Component {
     componentDidMount() {
         drawArea(this.props.waveform, this.canvasRef);
+        const handleMove = (ev) => {
+            this.updateWaveform({
+                x: ev.x,
+                y: ev.y
+            }, this.props.waveform);
+        }
+        document.addEventListener('mousedown', (ev) => {
+            if (ev.target === this.canvasRef) {
+                document.addEventListener('mousemove', handleMove);
+            }
+        });
+        document.addEventListener('mouseup', (ev) => {
+            document.removeEventListener('mousemove', handleMove);
+            this.setState({
+                prevZone: null
+            });
+        });
     }
     componentWillUpdate() {
         return false;
@@ -74,19 +91,8 @@ export default class waveEditor extends Component {
         
     }
     componentWillReceiveProps(newProps) {
-        const drawing = newProps.mouseData.down &&
-                        newProps.mouseData.downTarget === this.canvasRef;
-
         if (newProps.waveform !== this.props.waveform) {
             drawArea(newProps.waveform, this.canvasRef);
-        }
-        else if (drawing) {
-            this.updateWaveform(newProps.mouseData, newProps.waveform);
-        }
-        if (!drawing) {
-            this.setState({
-                prevZone: null
-            })
         }
     }
     render() {
@@ -94,7 +100,7 @@ export default class waveEditor extends Component {
             <canvas
               height={400}
               width={800}
-              ref={(canvas) => this.canvasRef = canvas}>
+              ref={(canvas) => {this.canvasRef = canvas}}>
             </canvas>
         );
     }

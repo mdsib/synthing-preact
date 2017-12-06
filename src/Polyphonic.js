@@ -6,6 +6,7 @@ export default class Polyphonic {
     constructor(audioContext) {
         this.voices = [];
         this.audioContext = audioContext;
+        this.periodicWave = null;
     }
     addVoice(note) {
         let osc = this.audioContext.createOscillator();
@@ -13,8 +14,8 @@ export default class Polyphonic {
         gain.gain.value = 0.5;
         osc.connect(gain);
         osc.frequency.value = note.frequency;
-        if (this.wave) {
-            osc.setPeriodicWave(this.wave);
+        if (this.periodicWave) {
+            osc.setPeriodicWave(this.periodicWave);
         }
         gain.connect(this.audioContext.destination);
         osc.start();
@@ -34,10 +35,12 @@ export default class Polyphonic {
     }
     changeWave(waveform) {
         FFT.forward(waveform);
-        const periodicWave = this.ac.createPeriodicWave(new Float32Array(FFT.real),
-                                                        new Float32Array(FFT.imag));
+        this.periodicWave = this.audioContext.createPeriodicWave(
+            new Float32Array(FFT.real),
+            new Float32Array(FFT.imag)
+        );
         for (let voice of this.voices) {
-            voice.osc.setPeriodicWave(periodicWave);
+            voice.osc.setPeriodicWave(this.periodicWave);
         }
     }
 }
