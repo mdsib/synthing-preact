@@ -1,6 +1,5 @@
-import DSP from 'dsp.js';
 import consts from './consts.js';
-const FFT = new DSP.FFT(consts.BUF_SIZE);
+import Envelope from 'envelope-generator';
 
 export default class Polyphonic {
     constructor(audioContext) {
@@ -8,37 +7,41 @@ export default class Polyphonic {
         this.audioContext = audioContext;
         this.periodicWave = null;
     }
-    addVoice(note) {
+    addVoice(note, adsr) {
         let osc = this.audioContext.createOscillator();
         let gain = this.audioContext.createGain();
-        gain.gain.value = 0.5;
-        osc.connect(gain);
+        let envelope = new Envelope(this.audioContext, adsr);
         osc.frequency.value = note.frequency;
+        gain.gain.setValueAtTime(0, 0)
         if (this.periodicWave) {
             osc.setPeriodicWave(this.periodicWave);
         }
+
+        envelope.connect(gain.gain);
+        osc.connect(gain);
         gain.connect(this.audioContext.destination);
+
         osc.start();
+        envelope.start(this.audioContext.currentTime - 0.1);
         this.voices.push({
             note,
             osc,
-            gain
+            gain,
+            envelope
         });
     }
     removeVoice(note) {
-        for (var i=0; i< this.voices.length; i++) {
-            if (this.voices[i].note.frequency === note.frequency) {
-                this.voices[i].osc.stop();
-                return this.voices.splice(i, 1);
+        for (var i=0; i < this.voices.length; i++) {
+            if (this.voices[i].note.note === note.note) {
+                this.voices[i].envelope.release(this.audioContext.currentTime);
+                let voice = this.voices[i];
+                voice.envelope.stop(this.audioContext.currentTime + 3);
+                voice.osc.stop(this.audioContext.currentTime + 3);
             }
         }
     }
     changeWave(waveform) {
-        FFT.forward(waveform);
-        this.periodicWave = this.audioContext.createPeriodicWave(
-            new Float32Array(FFT.real),
-            new Float32Array(FFT.imag)
-        );
+        this.periodicWave = waveform;
         for (let voice of this.voices) {
             voice.osc.setPeriodicWave(this.periodicWave);
         }

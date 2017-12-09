@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "dsp.js": "^1.0.1",
+    "envelope-generator": "^3.0.0",
     "preact": "^8.2.6"
   },
   "scripts": {

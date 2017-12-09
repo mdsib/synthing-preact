@@ -32,8 +32,7 @@ const boolArray = {
             newBa = newBa.concat(new Array(newLength - ba.length).fill(false));
         }
         return newBa;
-    },
-    create: (length) => {
+    }, create: (length) => {
         return new Array(length).fill(false);
     },
     update: (ba, idx, val) => {
@@ -50,6 +49,8 @@ class App extends Component {
         super();
         let initBeats = 4;
         this.state = {
+            metroMs: 250,
+            beat: 1,
             waveforms: [{
                 waveform: initialWave.slice(),
                 beats: boolArray.create(initBeats)
@@ -59,11 +60,24 @@ class App extends Component {
             mouseData: {
                 down: false,
                 pos: {x: 0, y: 0}
+            },
+            adsr: {
+                attackTime: 0.1,
+                decayTime: 1,
+                sustainLevel: 0.4,
+                releaseTime: 2
             }
         }
     }
 
     editingWaveform = () => this.state.waveforms[this.state.editingWaveformIdx].waveform
+
+    activeWaveforms = () => this.state.waveforms.reduce((accum, val) => {
+        if (val.beats[this.state.beat]) {
+            accum.push(val.waveform);
+        }
+        return accum;
+    }, [])
 
     updateWaveform = (idx = this.state.editingWaveformIdx, opts) => {
         this.setState({
@@ -113,6 +127,13 @@ class App extends Component {
         })
     }
 
+    metro = () => {
+        this.setState({
+            beat: (this.state.beat + 1) % this.state.numBeats
+        })
+        window.setTimeout(this.metro, this.state.metroMs);
+    }
+
     render() {
         const waves = this.state.waveforms.map((form, idx) => {
             return (
@@ -128,6 +149,7 @@ class App extends Component {
                 }}
                 activated={idx === this.state.editingWaveformIdx}
                 beats={this.state.waveforms[idx].beats}
+                beat={this.state.beat}
                 updateBeat={(i, val) => {
                     console.log('updating', i, val);
                     this.updateWaveform(idx, {
@@ -156,7 +178,8 @@ class App extends Component {
             <button onClick={() => {this.setBeats(this.state.numBeats - 1)}}>- beat</button>
             <button onClick={() => this.addWaveform()}>+</button>
             {waves}
-            <Synth waveform={this.editingWaveform()}></Synth>
+            <Synth waveforms={this.activeWaveforms()} adsr={this.state.adsr}></Synth>
+            <button onClick={this.metro}>start</button>
           </div>
         );
     }

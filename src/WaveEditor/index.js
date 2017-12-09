@@ -67,7 +67,7 @@ export default class waveEditor extends Component {
         const newWaveform = waveform.slice();
 
         let zone = helpers.bounded(
-            Math.floor(consts.BUF_SIZE * canvasCoords.x / waveCanvas.width) - 1,
+            Math.floor(consts.BUF_SIZE * canvasCoords.x / waveCanvas.width),
             0,
             consts.BUF_SIZE - 1
         );
