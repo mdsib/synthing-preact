@@ -4,6 +4,7 @@ import WaveManager from '../WaveManager/';
 import Synth from '../Synth/';
 import './App.css';
 import consts from '../consts.js';
+import helpers from '../helpers.js';
 
 const initialWave = new Array(consts.BUF_SIZE).fill(0);
 
@@ -42,6 +43,48 @@ const boolArray = {
     }
 }
 
+//TODO this
+class Knob extends Component {
+    componentDidMount() {
+        const handleMove = (ev) => {
+            let step = this.props.step || 0.5;
+            let newVal = this.props.val - (ev.movementY * step);
+            if (typeof(this.props.minVal) === 'number' && (newVal < this.props.minVal)) {
+                newVal = this.props.minVal;
+            } else if (typeof(this.props.maxVal) === 'number' && (newVal > this.props.maxVal)) {
+                newVal = this.props.maxVal;
+            }
+            this.props.update(newVal);
+        }
+        this.knobRef.addEventListener('mousedown', (ev) => {
+            ev.preventDefault();
+            document.addEventListener('mousemove', handleMove);
+            helpers.oneTime(document, 'mouseup', (ev) => {
+                document.removeEventListener('mousemove', handleMove);
+            });
+        })
+    }
+    render() {
+        return (
+            <div ref={(knob) => {this.knobRef = knob}}>{this.props.val}</div>
+        )
+    }
+}
+
+
+const Adsr = (props) => (
+    <div>
+    {['a', 'd', 's', 'r'].map((letter) => (
+        <Knob
+          val={props.adsr[letter]}
+          minVal={0}
+          maxVal={3}
+          step={0.1}
+          update={(newVal) => {props.update(letter, newVal)}}
+        />
+    ))}
+    </div>
+)
 
 
 class App extends Component {
@@ -62,12 +105,18 @@ class App extends Component {
                 pos: {x: 0, y: 0}
             },
             adsr: {
-                attackTime: 0.1,
-                decayTime: 1,
-                sustainLevel: 0.4,
-                releaseTime: 2
+                a: 0.3,
+                d: 1,
+                s: 0.4,
+                r: 1
             }
         }
+    }
+
+    updateAdsr = (letter, val) => {
+        this.setState({
+            adsr: Object.assign({}, this.state.adsr, {[letter]: val})
+        });
     }
 
     editingWaveform = () => this.state.waveforms[this.state.editingWaveformIdx].waveform
@@ -151,7 +200,6 @@ class App extends Component {
                 beats={this.state.waveforms[idx].beats}
                 beat={this.state.beat}
                 updateBeat={(i, val) => {
-                    console.log('updating', i, val);
                     this.updateWaveform(idx, {
                         beats: boolArray.update(
                             this.state.waveforms[idx].beats,
@@ -174,6 +222,7 @@ class App extends Component {
                 this.updateWaveform(this.state.editingWaveformIdx, {waveform});
               }}
             ></WaveEditor>
+            <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
             <button onClick={() => {this.setBeats(this.state.numBeats + 1)}}>+ beat</button>
             <button onClick={() => {this.setBeats(this.state.numBeats - 1)}}>- beat</button>
             <button onClick={() => this.addWaveform()}>+</button>

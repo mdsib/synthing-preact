@@ -3,14 +3,18 @@ import Envelope from 'envelope-generator';
 
 export default class Polyphonic {
     constructor(audioContext) {
-        this.voices = [];
         this.audioContext = audioContext;
         this.periodicWave = null;
     }
     addVoice(note, adsr) {
         let osc = this.audioContext.createOscillator();
         let gain = this.audioContext.createGain();
-        let envelope = new Envelope(this.audioContext, adsr);
+        let envelope = new Envelope(this.audioContext, {
+            attackTime: adsr.a,
+            decayTime: adsr.d,
+            sustainTime: adsr.s,
+            releaseTime: adsr.r
+        });
         osc.frequency.value = note.frequency;
         gain.gain.setValueAtTime(0, 0)
         if (this.periodicWave) {

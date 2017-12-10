@@ -1,8 +1,7 @@
-import { h, Component} from 'preact';
+import { h, Component } from 'preact';
 
 export default class WaveManager extends Component {
     render() {
-        console.log(this.props.beats);
         return (
             <div class="wave-manager">
               <div class="buttons">

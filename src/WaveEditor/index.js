@@ -38,20 +38,19 @@ export default class waveEditor extends Component {
     componentDidMount() {
         drawArea(this.props.waveform, this.canvasRef);
         const handleMove = (ev) => {
+            console.log('handling move');
             this.updateWaveform({
-                x: ev.x,
-                y: ev.y
+                x: ev.x + window.scrollX,
+                y: ev.y + window.scrollY
             }, this.props.waveform);
         }
-        document.addEventListener('mousedown', (ev) => {
-            if (ev.target === this.canvasRef) {
-                document.addEventListener('mousemove', handleMove);
-            }
-        });
-        document.addEventListener('mouseup', (ev) => {
-            document.removeEventListener('mousemove', handleMove);
-            this.setState({
-                prevZone: null
+        this.canvasRef.addEventListener('mousedown', (ev) => {
+            document.addEventListener('mousemove', handleMove);
+            helpers.oneTime(document, 'mouseup', (ev) => {
+                document.removeEventListener('mousemove', handleMove);
+                this.setState({
+                    prevZone: null
+                });
             });
         });
     }
