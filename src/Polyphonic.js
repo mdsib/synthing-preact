@@ -3,18 +3,23 @@ import Envelope from 'envelope-generator';
 
 export default class Polyphonic {
     constructor(audioContext) {
+        this.voices = {};
         this.audioContext = audioContext;
         this.periodicWave = null;
     }
     addVoice(note, adsr) {
+        this.voices[note.note] = this.voices[note.note] || [];
+
         let osc = this.audioContext.createOscillator();
         let gain = this.audioContext.createGain();
         let envelope = new Envelope(this.audioContext, {
             attackTime: adsr.a,
             decayTime: adsr.d,
-            sustainTime: adsr.s,
-            releaseTime: adsr.r
+            sustainLevel: adsr.s,
+            releaseTime: adsr.r,
+            maxLevel: 0.4
         });
+
         osc.frequency.value = note.frequency;
         gain.gain.setValueAtTime(0, 0)
         if (this.periodicWave) {
@@ -27,27 +32,33 @@ export default class Polyphonic {
 
         osc.start();
         envelope.start(this.audioContext.currentTime - 0.1);
-        this.voices.push({
+
+        this.voices[note.note].push({
             note,
             osc,
             gain,
             envelope
         });
     }
+    //TODO this is fucked up right now. I need to rethink keeping track of multiple voices on one note to allow them to have their waves changed. and I can't remove all of them at the same time, only the most recent voice? I guess I can assume that the most recent voice is always the one being removed... Stuff like that.
     removeVoice(note) {
-        for (var i=0; i < this.voices.length; i++) {
-            if (this.voices[i].note.note === note.note) {
-                this.voices[i].envelope.release(this.audioContext.currentTime);
-                let voice = this.voices[i];
-                voice.envelope.stop(this.audioContext.currentTime + 3);
-                voice.osc.stop(this.audioContext.currentTime + 3);
-            }
-        }
+        const voiceList = this.voices[note.note];
+        const voice = voiceList[voiceList.length - 1];
+        voice.envelope.release(this.audioContext.currentTime);
+        voice.osc.stop(voice.envelope.getReleaseCompleteTime());
+        setTimeout(() => {
+            voice.gain.disconnect();
+            voiceList.splice(voiceList.indexOf(voice), 1);
+        }, 1000 * (voice.envelope.getReleaseCompleteTime() - this.audioContext.currentTime));
     }
     changeWave(waveform) {
-        this.periodicWave = waveform;
-        for (let voice of this.voices) {
-            voice.osc.setPeriodicWave(this.periodicWave);
+        if (waveform !== this.periodicWave) {
+            this.periodicWave = waveform;
+            for (let noteVoices in this.voices) {
+                for (let voice of this.voices[noteVoices]) {
+                    voice.osc.setPeriodicWave(this.periodicWave);
+                }
+            }
         }
     }
 }

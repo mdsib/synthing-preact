@@ -5,6 +5,9 @@ import consts from '../consts.js';
 import DSP from 'dsp.js';
 const FFT = new DSP.FFT(consts.BUF_SIZE);
 
+const ac = new AudioContext();
+const P = new Polyphonic(ac);
+
 export default class Synth extends Component {
     startAudio() {
         var keyboard = new AudioKeys({polyphony: 3});
@@ -28,9 +31,6 @@ export default class Synth extends Component {
         return null;
    } 
 }
-
-const ac = new AudioContext();
-const P = new Polyphonic(ac);
 
 function combineWaveforms(waveforms) {
     const res = new Array(consts.BUF_SIZE).fill(0);
