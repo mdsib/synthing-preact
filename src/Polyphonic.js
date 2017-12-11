@@ -40,7 +40,6 @@ export default class Polyphonic {
             envelope
         });
     }
-    //TODO this is fucked up right now. I need to rethink keeping track of multiple voices on one note to allow them to have their waves changed. and I can't remove all of them at the same time, only the most recent voice? I guess I can assume that the most recent voice is always the one being removed... Stuff like that.
     removeVoice(note) {
         const voiceList = this.voices[note.note];
         const voice = voiceList[voiceList.length - 1];
