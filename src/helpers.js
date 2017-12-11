@@ -9,6 +9,15 @@ export default {
             handler(ev);
         }
         target.addEventListener(type, doOnce);
+    },
+    throttle: (fn, ms) => {
+        let time = 0;
+        return (...args) => {
+            let now = Date.now();
+            if (now >= time + ms) {
+                fn(...args);
+                time = now;
+            }
+        }
     }
-
 };

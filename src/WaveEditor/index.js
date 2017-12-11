@@ -2,7 +2,7 @@ import { h, Component } from 'preact';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
 
-const drawArea = (amplitudes, canvas, begin = 0, end = undefined) => {
+const drawArea = helpers.throttle((amplitudes, canvas, begin = 0, end = undefined) => {
     const ctx = canvas.getContext("2d");
     const rectWidth = canvas.width / consts.BUF_SIZE;
     const roundedWidth = Math.max(1, rectWidth)
@@ -19,7 +19,7 @@ const drawArea = (amplitudes, canvas, begin = 0, end = undefined) => {
             ctx.fillRect(roundedXOffset, -amp + halfCanvas, roundedWidth + 1, lineWidth);
         });
     });
-}
+}, 20)
 
 const smoothZoneRange = function (waveData, begin, end) {
     if (begin > end) {
@@ -38,7 +38,6 @@ export default class waveEditor extends Component {
     componentDidMount() {
         drawArea(this.props.waveform, this.canvasRef);
         const handleMove = (ev) => {
-            console.log('handling move');
             this.updateWaveform({
                 x: ev.x + window.scrollX,
                 y: ev.y + window.scrollY
