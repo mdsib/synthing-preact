@@ -100,10 +100,6 @@ class App extends Component {
             }],
             numBeats: initBeats,
             editingWaveformIdx: 0,
-            mouseData: {
-                down: false,
-                pos: {x: 0, y: 0}
-            },
             adsr: {
                 a: 0.3,
                 d: 1,
