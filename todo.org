@@ -1,0 +1,26 @@
+* features
+** adjustable bpm using knob
+** knob improvements
+*** selectable with tab or click
+*** able to enter value with keyboard
+*** able to use arrow keys to adjust
+** checkbox improvements
+*** remake using normal elements
+*** selectable by tab / mouse and navigable by using arrow keys
+*** able to drag mouse over multiple checkboxes
+** beat improvements?
+*** allow for multiple sections, switching between them after x bars. for more of a song type of thing. maybe a keybinding for switching to the next part
+** wave-editor
+*** allow user to zoom and navigate
+*** allow user to discretely edit one sample at a time, or multiple, with keybindings
+*** add new editing modes like jitter, smooth, randomize, invert, reverse, push (like smudge tool)...
+*** allow for conversion to/from curves, to be used on arbitrary points of the wave (if that's too difficult, a starting point can just have raster / vector mode)
+** add curve that allows for parameter adjustment over time (delay, reverb, adsr, others)
+** performance mode - draw the final wave sent to polyphonic instead of the editing wave
+** make UI look like a UI instead of a weird thing
+
+* TODO investigate polyphonic for errors leading to adsr going away sometimes
+** change voices to an object keyed by note name or something like that, since we don't want unison notes.
+*** maybe also work on persisting the note's gain / etc. or at least removing them properly
+** change stop time to look at envelope's release time
+
