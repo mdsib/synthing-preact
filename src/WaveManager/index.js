@@ -1,4 +1,5 @@
 import { h, Component } from 'preact';
+import './style.css';
 
 export default class WaveManager extends Component {
     render() {
@@ -12,8 +13,17 @@ export default class WaveManager extends Component {
               </div>
               <div class="beats">
                 {this.props.beats.map((val, idx) => {
-                    return <input type="checkbox" checked={val} onChange={(ev) => {this.props.updateBeat(idx, ev.target.checked)}}></input>
-                })}
+                    return (
+                        <span class={this.props.beat === idx ? 'beat' : ''}>
+                          <input
+                            type="checkbox"
+                            checked={val}
+                            onChange={(ev) => {this.props.updateBeat(
+                              idx,
+                              ev.target.checked)}}
+                          ></input>
+                        </span>
+                )})}
               </div>
             </div>
         );

@@ -18,3 +18,5 @@
 *** DONE be able to change active waveform
 * <2017-12-03 Sun 21:35>
 here's an idea: make modules in vanilla js and interact with them via react. We'll get some reusability in other projects and keep react doing viewstuff, not statelogicstuff
+* <2017-12-10 Sun 18:18>
+Working on some optimizations. Playing is event heavy so I want to make keyevents be as quick as possible. Bubbling

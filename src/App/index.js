@@ -93,7 +93,7 @@ class App extends Component {
         let initBeats = 4;
         this.state = {
             metroMs: 250,
-            beat: 1,
+            beat: 0,
             waveforms: [{
                 waveform: initialWave.slice(),
                 beats: boolArray.create(initBeats)
@@ -173,10 +173,25 @@ class App extends Component {
     }
 
     metro = () => {
+        const loop = () => {
+            this.setState({
+                beat: (this.state.beat + 1) % this.state.numBeats
+            })
+        }
+        const interval = window.setInterval(loop, this.state.metroMs);
         this.setState({
-            beat: (this.state.beat + 1) % this.state.numBeats
+            interval
         })
-        window.setTimeout(this.metro, this.state.metroMs);
+    }
+
+    stopMetro = () => {
+        if (this.state.interval) {
+            window.clearInterval(this.state.interval);
+        }
+        this.setState({
+            interval: null,
+            beat: 0
+        })
     }
 
     render() {
@@ -225,6 +240,7 @@ class App extends Component {
             {waves}
             <Synth waveforms={this.activeWaveforms()} adsr={this.state.adsr}></Synth>
             <button onClick={this.metro}>start</button>
+            <button onClick={this.stopMetro}>stop</button>
           </div>
         );
     }
