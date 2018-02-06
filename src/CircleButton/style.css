@@ -1,0 +1,38 @@
+.circle-button {
+    display: inline-flex !important;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.circle-button.circle {
+    background: transparent;
+    border: 3px solid transparent;
+}
+
+.circle-button.circle .triangle {
+    border-top-color: #ff735e;
+}
+
+.circle-button.circle .rectangle {
+    background: #ff735e;
+}
+
+.circle-button.circle:hover {
+    background: #edccc4;
+    transition: background 0.2s linear;
+}
+.circle-button.circle:active {
+    border: 3px solid rgba(255,75,54,0.5);
+    
+}
+.circle-button.circle.active {
+    background: #ff735e;
+}
+
+.circle-button.circle.active .triangle {
+    border-top-color: #f1ddd8;
+}
+
+.circle-button.circle.active .rectangle {
+    background: #f1ddd8;
+}
