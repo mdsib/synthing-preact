@@ -2,11 +2,14 @@ import { h, Component } from 'preact';
 import WaveEditor from '../WaveEditor/';
 import WaveManager from '../WaveManager/';
 import Synth from '../Synth/';
+import CircleButton from '../CircleButton/';
 import './App.css';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
 
-const initialWave = new Array(consts.BUF_SIZE).fill(0);
+const initialWave = new Array(consts.BUF_SIZE)
+    .fill(0)
+    .map((val, i) => Math.sin(i / consts.BUF_SIZE * Math.PI * 2));
 
 const immObjArray = {
     update: (arr, idx, opts) => {
@@ -143,7 +146,7 @@ class App extends Component {
 
     changeEditingWaveform = (i) => this.setState({editingWaveformIdx: i})
 
-    addWaveform = (waveform = new Array(consts.BUF_SIZE).fill(0), at = this.state.waveforms.length, isEditing = false) => {
+    addWaveform = (waveform = initialWave.slice(), at = this.state.waveforms.length, isEditing = false) => {
         const waveforms = immObjArray.add(this.state.waveforms, at, {
             waveform,
             beats: boolArray.create(this.state.numBeats)
@@ -194,6 +197,11 @@ class App extends Component {
         })
     }
 
+    keyHandler(e) {
+        //TODO handle global commands, maybe some modal stuff even wow
+        console.log('wow i got through', e.key);
+    }
+
     render() {
         const waves = this.state.waveforms.map((form, idx) => {
             return (
@@ -224,23 +232,39 @@ class App extends Component {
         })
         return (
           <div
-            className="App"
+              className="App"
+              onKeyDown={this.keyHandler}
           >
-            <WaveEditor
-              mouseData={this.state.mouseData}
-              waveform={this.editingWaveform()}
-              updateWaveform={(waveform) => {
-                this.updateWaveform(this.state.editingWaveformIdx, {waveform});
-              }}
-            ></WaveEditor>
-            <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
-            <button onClick={() => {this.setBeats(this.state.numBeats + 1)}}>+ beat</button>
-            <button onClick={() => {this.setBeats(this.state.numBeats - 1)}}>- beat</button>
-            <button onClick={() => this.addWaveform()}>+</button>
-            {waves}
-            <Synth waveforms={this.activeWaveforms()} adsr={this.state.adsr}></Synth>
-            <button onClick={this.metro}>start</button>
-            <button onClick={this.stopMetro}>stop</button>
+              <h1>synthing</h1>
+                  <WaveEditor
+                      mouseData={this.state.mouseData}
+                      waveform={this.editingWaveform()}
+                      updateWaveform={(waveform) => {
+                              this.updateWaveform(this.state.editingWaveformIdx, {waveform});
+                      }}
+                  ></WaveEditor>
+                  <div class="global-controls">
+                      <CircleButton
+                          active={this.state.interval}
+                          action={this.metro}
+                      >
+                          <div class="triangle"></div>
+                      </CircleButton>
+                      <CircleButton
+                          active={!this.state.interval}
+                          action={this.stopMetro}
+                      >
+                          <div class="rectangle"></div>
+                      </CircleButton>
+                      <button onClick={this.metro}>start</button>
+                      <button onClick={() => {this.setBeats(this.state.numBeats + 1)}}>+ beat</button>
+                      <button onClick={() => {this.setBeats(this.state.numBeats - 1)}}>- beat</button>
+                      <button onClick={this.stopMetro}>stop</button>
+                      <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
+                  </div>
+                  {waves}
+                  <button onClick={() => this.addWaveform()}>+</button>
+                  <Synth waveforms={this.activeWaveforms()} adsr={this.state.adsr}></Synth>
           </div>
         );
     }

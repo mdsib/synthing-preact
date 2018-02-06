@@ -1,22 +1,23 @@
 import { h, Component } from 'preact';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
+import './style.css';
 
 const drawArea = helpers.throttle((amplitudes, canvas, begin = 0, end = undefined) => {
     const ctx = canvas.getContext("2d");
     const rectWidth = canvas.width / consts.BUF_SIZE;
     const roundedWidth = Math.max(1, rectWidth)
-    const lineWidth = 5;
+    const lineWidth = 1;
     const halfCanvas = (canvas.height - lineWidth) / 2;
     window.requestAnimationFrame(() => {
         amplitudes.forEach((amp, idx) => {
             amp *= halfCanvas;
             const roundedXOffset = Math.round(idx * rectWidth);
             ctx.clearRect(roundedXOffset, 0, roundedWidth + 1, canvas.height);
-            ctx.fillStyle  = "#ddd";
+            ctx.fillStyle  = "#ff735e";
             ctx.fillRect(roundedXOffset, halfCanvas, roundedWidth + 1, -amp);
-            ctx.fillStyle  = "#e44";
-            ctx.fillRect(roundedXOffset, -amp + halfCanvas, roundedWidth + 1, lineWidth);
+            //ctx.fillStyle  = "rgba(255, 115, 94, 0.1)"; // changing color for the border
+            //ctx.fillRect(roundedXOffset, -amp + halfCanvas, roundedWidth + 1, lineWidth);
         });
     });
 }, 20)
@@ -96,9 +97,10 @@ export default class waveEditor extends Component {
     render() {
         return (
             <canvas
-              height={400}
-              width={800}
-              ref={(canvas) => {this.canvasRef = canvas}}>
+                class="waveEditor"
+                height={400}
+                width={window.innerWidth - 100}
+                ref={(canvas) => {this.canvasRef = canvas}}>
             </canvas>
         );
     }
