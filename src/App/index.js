@@ -46,7 +46,6 @@ const boolArray = {
     }
 }
 
-//TODO this
 class Knob extends Component {
     componentDidMount() {
         const handleMove = (ev) => {
@@ -247,6 +246,7 @@ class App extends Component {
                       <CircleButton
                           active={this.state.interval}
                           action={this.metro}
+                          disabled={this.state.interval}
                       >
                           <div class="triangle"></div>
                       </CircleButton>
@@ -256,10 +256,8 @@ class App extends Component {
                       >
                           <div class="rectangle"></div>
                       </CircleButton>
-                      <button onClick={this.metro}>start</button>
                       <button onClick={() => {this.setBeats(this.state.numBeats + 1)}}>+ beat</button>
                       <button onClick={() => {this.setBeats(this.state.numBeats - 1)}}>- beat</button>
-                      <button onClick={this.stopMetro}>stop</button>
                       <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
                   </div>
                   {waves}

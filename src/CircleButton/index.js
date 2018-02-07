@@ -10,12 +10,13 @@ const handleAction = (action, e) => {
 }
 
 export default props => (
-    <div
+    <button
         tabindex="0"
+        disabled={props.disabled}
         class={`circle-button circle${props.active ? ' active' : ''}`}
         onClick={props.action}
         onKeyDown={handleAction.bind(null, props.action)}
     >
         {props.children}
-    </div>
+    </button>
 )

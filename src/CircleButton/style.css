@@ -1,12 +1,10 @@
 .circle-button {
-    display: inline-flex !important;
     margin: 5px;
-    cursor: pointer;
 }
 
 .circle-button.circle {
     background: transparent;
-    border: 3px solid transparent;
+    border: 2px solid transparent;
 }
 
 .circle-button.circle .triangle {
@@ -21,8 +19,9 @@
     background: #edccc4;
     transition: background 0.2s linear;
 }
-.circle-button.circle:active {
-    border: 3px solid rgba(255,75,54,0.5);
+
+.circle-button.circle:active, .circle-button.circle:focus {
+    border: 2px solid rgba(255,75,54,0.2);
     
 }
 .circle-button.circle.active {
