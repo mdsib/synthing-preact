@@ -3,6 +3,7 @@ import WaveEditor from '../WaveEditor/';
 import WaveManager from '../WaveManager/';
 import Synth from '../Synth/';
 import CircleButton from '../CircleButton/';
+import Knob from '../Knob/';
 import './App.css';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
@@ -43,33 +44,6 @@ const boolArray = {
         const newBa = ba.slice();
         newBa[idx] = val;
         return newBa;
-    }
-}
-
-class Knob extends Component {
-    componentDidMount() {
-        const handleMove = (ev) => {
-            let step = this.props.step || 0.5;
-            let newVal = this.props.val - (ev.movementY * step);
-            if (typeof(this.props.minVal) === 'number' && (newVal < this.props.minVal)) {
-                newVal = this.props.minVal;
-            } else if (typeof(this.props.maxVal) === 'number' && (newVal > this.props.maxVal)) {
-                newVal = this.props.maxVal;
-            }
-            this.props.update(newVal);
-        }
-        this.knobRef.addEventListener('mousedown', (ev) => {
-            ev.preventDefault();
-            document.addEventListener('mousemove', handleMove);
-            helpers.oneTime(document, 'mouseup', (ev) => {
-                document.removeEventListener('mousemove', handleMove);
-            });
-        })
-    }
-    render() {
-        return (
-            <div ref={(knob) => {this.knobRef = knob}}>{this.props.val}</div>
-        )
     }
 }
 
