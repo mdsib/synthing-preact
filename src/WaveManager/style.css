@@ -1,3 +1,11 @@
-.beat {
-    background: red;
+.beats {
+    display: flex;
+}
+
+.beats > * {
+    margin: 5px;
+}
+
+.beats > *:first-child {
+    margin-right: 10px;
 }

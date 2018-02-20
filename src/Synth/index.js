@@ -25,7 +25,7 @@ export default class Synth extends Component {
         return false;
     }
     componentWillReceiveProps(newProps) {
-        updateAudio(newProps.waveforms);
+        updateAudio(newProps.waveform);
     }
     render() {
         return null;
@@ -42,8 +42,8 @@ function combineWaveforms(waveforms) {
     return res;
 }
 
-function updateAudio(waveforms) {
-    const waveform = combineWaveforms(waveforms);
+function updateAudio(waveform) {
+    //const waveform = combineWaveforms(waveforms);
     FFT.forward(waveform);
     const periodicWave = ac.createPeriodicWave(
         new Float32Array(FFT.real),

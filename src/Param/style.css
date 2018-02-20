@@ -1,0 +1,33 @@
+.param {
+    position: relative;
+    display: inline-block;
+    padding: 10px;
+    padding-right: 46px;
+    box-sizing: border-box;
+}
+
+.param > * {
+    cursor: ns-resize;
+}
+
+.param label {
+    display: block;
+    font-size: 11px;
+    text-align: left;
+    position: relative;
+    left: -1px;
+}
+
+.param input {
+    border: 0;
+    width: 60px;
+    height: 22px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.param > canvas {
+    position: absolute;
+    right: 5px;
+    top: 15px;
+}

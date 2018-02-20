@@ -1,0 +1,23 @@
+.checkbox {
+    background: #f1ddd8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+}
+.checkbox .checkbox-circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 999px;
+    background: #ff735e;
+}
+
+.checkbox.beat {
+    background: #ff735e;
+}
+
+.checkbox.beat .checkbox-circle {
+    background: #f1ddd8;
+}

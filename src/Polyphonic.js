@@ -13,10 +13,10 @@ export default class Polyphonic {
         let osc = this.audioContext.createOscillator();
         let gain = this.audioContext.createGain();
         let envelope = new Envelope(this.audioContext, {
-            attackTime: adsr.a,
-            decayTime: adsr.d,
-            sustainLevel: adsr.s,
-            releaseTime: adsr.r,
+            attackTime: adsr.attack,
+            decayTime: adsr.decay,
+            sustainLevel: adsr.sustain,
+            releaseTime: adsr.release,
             maxLevel: 0.4
         });
 

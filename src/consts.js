@@ -1,3 +1,3 @@
 export default {
-    BUF_SIZE: 1024
+    BUF_SIZE: 256
 }

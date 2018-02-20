@@ -1,7 +1,8 @@
 import { h, Component} from 'preact';
 import helpers from '../helpers.js';
+import './style.css';
 
-export default class Knob extends Component {
+export default class Param extends Component {
     componentDidMount() {
         const handleMove = (ev) => {
             let step = this.props.step || 0.5;
@@ -13,11 +14,7 @@ export default class Knob extends Component {
             }
             this.props.update(newVal);
         }
-        this.knobRef.addEventListener('dblclick', (ev) => {
-            console.log('double');
-            this.knobRef.setAttribute('contenteditable', true);
-        });
-        this.knobRef.addEventListener('mousedown', (ev) => {
+        this.paramRef.addEventListener('mousedown', (ev) => {
             ev.preventDefault();
             document.addEventListener('mousemove', handleMove);
             helpers.oneTime(document, 'mouseup', (ev) => {
@@ -25,9 +22,27 @@ export default class Knob extends Component {
             });
         });
     }
+    handleChange(e) {
+        this.props.update(e.target.value);
+    }
+    getNumString() {
+        return (this.props.precision ?
+            this.props.val.toFixed(this.props.precision) :
+                this.props.val) + (this.props.suffix || '');
+    }
     render() {
+        const inputId = `param-${this.props.name}`;
         return (
-            <div ref={(knob) => {this.knobRef = knob}}>{this.props.val}</div>
+            <div class="param" ref={(param) => {this.paramRef = param}}>
+                <label for={inputId}>{this.props.name}</label>
+                <input
+                    type="text"
+                    id={inputId}
+                    value={this.getNumString()}
+                    onChange={this.handleChange}
+                ></input>
+                {this.props.children}
+            </div>
         )
     }
 }

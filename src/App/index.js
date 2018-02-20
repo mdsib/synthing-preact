@@ -3,7 +3,8 @@ import WaveEditor from '../WaveEditor/';
 import WaveManager from '../WaveManager/';
 import Synth from '../Synth/';
 import CircleButton from '../CircleButton/';
-import Knob from '../Knob/';
+import Param from '../Param/';
+import Wheel from '../Wheel/';
 import './App.css';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
@@ -27,7 +28,7 @@ const immObjArray = {
         const newArr = arr.slice();
         newArr.splice(idx, 1);
         return newArr;
-   }
+    }
 }
 
 const boolArray = {
@@ -47,18 +48,45 @@ const boolArray = {
     }
 }
 
+const adsrProperties = [
+    {
+        name: 'attack',
+        suffix: 's',
+        maxVal: 10
+    },
+    {
+        name: 'decay',
+        suffix: 's',
+        maxVal: 10
+    },
+    {
+        name: 'sustain',
+        maxVal: 2
+    },
+    {
+        name: 'release',
+        suffix: 's',
+        maxVal: 30,
+    }
+];
+
 
 const Adsr = (props) => (
-    <div>
-    {['a', 'd', 's', 'r'].map((letter) => (
-        <Knob
-          val={props.adsr[letter]}
-          minVal={0}
-          maxVal={3}
-          step={0.1}
-          update={(newVal) => {props.update(letter, newVal)}}
-        />
-    ))}
+    <div style="display: inline-block;">
+        {adsrProperties.map((aspect) => (
+            <Param
+                suffix={aspect.suffix || ''}
+                precision={1}
+                val={props.adsr[aspect.name]}
+                name={aspect.name}
+                minVal={0}
+                maxVal={aspect.maxVal}
+                step={0.1}
+                update={(newVal) => {props.update(aspect.name, newVal)}}
+                >
+                <Wheel percent={props.adsr[aspect.name] / aspect.maxVal} />
+            </Param>
+        ))}
     </div>
 )
 
@@ -68,26 +96,27 @@ class App extends Component {
         super();
         let initBeats = 4;
         this.state = {
-            metroMs: 250,
+            bpm: 120,
             beat: 0,
             waveforms: [{
+                active: true,
                 waveform: initialWave.slice(),
-                beats: boolArray.create(initBeats)
+                beats: boolArray.update(boolArray.create(initBeats), 0, true)
             }],
             numBeats: initBeats,
             editingWaveformIdx: 0,
             adsr: {
-                a: 0.3,
-                d: 1,
-                s: 0.4,
-                r: 1
+                attack: 0.3,
+                decay: 1,
+                sustain: 0.4,
+                release: 1
             }
         }
     }
 
-    updateAdsr = (letter, val) => {
+    updateAdsr = (aspect, val) => {
         this.setState({
-            adsr: Object.assign({}, this.state.adsr, {[letter]: val})
+            adsr: Object.assign({}, this.state.adsr, {[aspect]: val})
         });
     }
 
@@ -99,6 +128,19 @@ class App extends Component {
         }
         return accum;
     }, [])
+
+    //TODO: for some reason, this function ends up modifying the array passed in as a prop to WaveEditor. I probably need to break editor out into viewer as well. But in any case, there should be a nice way to observe changes in the array or at least communicate when a change has happened.
+    totalWaveform = () => {
+        const allWaves = this.activeWaveforms();
+        if (allWaves.length === 0) {
+            return new Array(consts.BUF_SIZE).fill(0);
+        }
+        const firstWave = allWaves.shift();
+        return allWaves.reduce(
+            (totalArray, currWaveform, i) => totalArray.map((val, j) => ((val * (i + 1)) + currWaveform[j]) / (i + 2)),
+            firstWave
+        )
+    }
 
     updateWaveform = (idx = this.state.editingWaveformIdx, opts) => {
         this.setState({
@@ -124,7 +166,7 @@ class App extends Component {
             waveform,
             beats: boolArray.create(this.state.numBeats)
         });
-                       
+
         const state = {
             waveforms
         };
@@ -149,15 +191,18 @@ class App extends Component {
     }
 
     metro = () => {
-        const loop = () => {
-            this.setState({
-                beat: (this.state.beat + 1) % this.state.numBeats
-            })
-        }
-        const interval = window.setInterval(loop, this.state.metroMs);
         this.setState({
-            interval
-        })
+            interval: true
+        });
+        const loop = () => {
+            if (this.state.interval) {
+                this.setState({
+                    beat: (this.state.beat + 1) % this.state.numBeats
+                })
+                window.setTimeout(loop, (1 / this.state.bpm) * 60000);
+            }
+        }
+        loop();
     }
 
     stopMetro = () => {
@@ -165,7 +210,7 @@ class App extends Component {
             window.clearInterval(this.state.interval);
         }
         this.setState({
-            interval: null,
+            interval: false,
             beat: 0
         })
     }
@@ -175,69 +220,91 @@ class App extends Component {
         console.log('wow i got through', e.key);
     }
 
+    setBpm = (newBpm) => {
+        this.setState({
+            bpm: newBpm
+        });
+    }
+
     render() {
         const waves = this.state.waveforms.map((form, idx) => {
             return (
-              <WaveManager
-                activate={this.changeEditingWaveform.bind(this, idx)}
-                remove={this.removeWaveform.bind(this, idx)}
-                duplicate={() => {
-                    let pleaseActivate = false;
-                    if (this.state.editingWaveformIdx === idx) {
-                        pleaseActivate = true;
-                    }
-                    this.addWaveform(this.state.waveforms[idx].waveform.slice(), idx + 1, pleaseActivate);
-                }}
-                activated={idx === this.state.editingWaveformIdx}
-                beats={this.state.waveforms[idx].beats}
-                beat={this.state.beat}
-                updateBeat={(i, val) => {
-                    this.updateWaveform(idx, {
-                        beats: boolArray.update(
-                            this.state.waveforms[idx].beats,
-                            i,
-                            val
-                        )
-                    });
-                }}
-              ></WaveManager>
+                <WaveManager
+                    activate={this.changeEditingWaveform.bind(this, idx)}
+                    remove={this.removeWaveform.bind(this, idx)}
+                    duplicate={() => {
+                            let pleaseActivate = false;
+                            if (this.state.editingWaveformIdx === idx) {
+                                pleaseActivate = true;
+                            }
+                            this.addWaveform(this.state.waveforms[idx].waveform.slice(), idx + 1, pleaseActivate);
+                    }}
+                    activated={idx === this.state.editingWaveformIdx}
+                    waveform={this.state.waveforms[idx].waveform}
+                    beats={this.state.waveforms[idx].beats}
+                    beat={this.state.beat}
+                    updateBeat={(i, val) => {
+                            this.updateWaveform(idx, {
+                                beats: boolArray.update(
+                                    this.state.waveforms[idx].beats,
+                                    i,
+                                    val
+                                )
+                            });
+                    }}
+                ></WaveManager>
             );
         })
         return (
-          <div
-              className="App"
-              onKeyDown={this.keyHandler}
-          >
-              <h1>synthing</h1>
-                  <WaveEditor
-                      mouseData={this.state.mouseData}
-                      waveform={this.editingWaveform()}
-                      updateWaveform={(waveform) => {
-                              this.updateWaveform(this.state.editingWaveformIdx, {waveform});
-                      }}
-                  ></WaveEditor>
-                  <div class="global-controls">
-                      <CircleButton
-                          active={this.state.interval}
-                          action={this.metro}
-                          disabled={this.state.interval}
-                      >
-                          <div class="triangle"></div>
-                      </CircleButton>
-                      <CircleButton
-                          active={!this.state.interval}
-                          action={this.stopMetro}
-                      >
-                          <div class="rectangle"></div>
-                      </CircleButton>
-                      <button onClick={() => {this.setBeats(this.state.numBeats + 1)}}>+ beat</button>
-                      <button onClick={() => {this.setBeats(this.state.numBeats - 1)}}>- beat</button>
-                      <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
-                  </div>
-                  {waves}
-                  <button onClick={() => this.addWaveform()}>+</button>
-                  <Synth waveforms={this.activeWaveforms()} adsr={this.state.adsr}></Synth>
-          </div>
+            <div
+                className="App"
+                onKeyDown={this.keyHandler}
+            >
+                <h1>synthing</h1>
+                <WaveEditor
+                    mouseData={this.state.mouseData}
+                    waveform={this.editingWaveform()}
+                    updateWaveform={(waveform) => {
+                            this.updateWaveform(this.state.editingWaveformIdx, {waveform});
+                    }}
+                ></WaveEditor>
+                <div class="global-controls">
+                    <CircleButton
+                        active={this.state.interval}
+                        action={this.metro}
+                        disabled={this.state.interval}
+                    >
+                        <div class="triangle"></div>
+                    </CircleButton>
+                    <CircleButton
+                        active={!this.state.interval}
+                        action={this.stopMetro}
+                    >
+                        <div class="rectangle"></div>
+                    </CircleButton>
+                    <Param
+                        precision={0}
+                        name="bpm"
+                        minVal={20}
+                        maxVal={600}
+                        step={1}
+                        val={this.state.bpm}
+                        update={this.setBpm}
+                    />
+                    <Param
+                        name="beats"
+                        minVal="1"
+                        maxVal={16}
+                        step="1"
+                        val={this.state.numBeats}
+                        update={this.setBeats}
+                    />
+                    <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
+                </div>
+                {waves}
+                <button onClick={() => this.addWaveform()}>+</button>
+                <Synth waveform={this.totalWaveform()} adsr={this.state.adsr}></Synth>
+            </div>
         );
     }
 }

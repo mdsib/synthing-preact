@@ -1,4 +1,5 @@
 export default {
+    partial: (f, ...args) => (...moreArgs) => f(...args, ...moreArgs),
     linear: (m, x, b) => (m * x) + b,
     bounded: (val, min, max) => val < min ? min : (val > max ? max : val),
     scale: (buf, amt) => buf.map(val => val * amt),
