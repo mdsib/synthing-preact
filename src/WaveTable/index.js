@@ -37,7 +37,7 @@ export default class WaveTable extends Component {
     }
     render() {
         const height = this.props.height || 400;
-        const width = this.props.width || window.innerWidth - 100;
+        const width = this.props.width || window.innerWidth - 120;
         return (
             <canvas
                 class="wave-table"

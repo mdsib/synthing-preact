@@ -6,15 +6,22 @@ import './style.css';
 
 export default class WaveManager extends Component {
     render() {
+        const modeClass = this.props.activated ? ' selected' : '';
         return (
-            <div class="wave-manager">
+            <div class={`wave-manager${modeClass}`}>
                 <div class="buttons">
-                    {this.props.activated ? (
-                         <div>
-                         <button onClick={this.props.remove}>remove</button>
-                         <button onClick={this.props.duplicate}>dupe</button>
-                         </div>
-                    ) : ''}
+                    <div class="left-button-group">
+                        {this.props.activated ? (
+                             <div>
+                                 <button class="item" onClick={this.props.remove}>remove</button>
+                                 <button class="item" onClick={this.props.duplicate}>dupe</button>
+                             </div>
+                        ) : ''}
+                    </div>
+                    <div class="right-button-group">
+                        <button class="item">solo</button>
+                        <button class="item">mute</button>
+                    </div>
                 </div>
                 <div class="beats">
                     <div onClick={this.props.activate}>

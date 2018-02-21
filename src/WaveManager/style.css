@@ -9,3 +9,38 @@
 .beats > *:first-child {
     margin-right: 10px;
 }
+
+.wave-manager {
+    margin: 5px 0;
+    display: inline-flex;
+    align-self: left;
+    flex-direction: column;
+}
+
+.wave-manager .buttons {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 5px 0 5px;
+}
+
+.wave-manager .buttons .item {
+    margin: 0 5px;
+}
+
+.wave-manager .buttons .item:first-child {
+    margin-left: 0;
+}
+
+.wave-manager .buttons .item:last-child {
+    margin-right: 0;
+}
+
+.wave-manager.selected {
+    background: #f1ddd8;
+}
+
+.wave-manager.selected .checkbox:not(.beat),
+.wave-manager.selected .checkbox.beat .checkbox-circle,
+.wave-manager.selected .wave-table {
+    background: #fff;
+}
