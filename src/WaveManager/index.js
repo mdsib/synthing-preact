@@ -19,8 +19,18 @@ export default class WaveManager extends Component {
                         ) : ''}
                     </div>
                     <div class="right-button-group">
-                        <button class="item">solo</button>
-                        <button class="item">mute</button>
+                        <button
+                            class={`item${this.props.waveformData.solo ? ' active' : ''}`}
+                            onClick={this.props.toggleSolo}
+                        >
+                            solo
+                        </button>
+                        <button
+                            class={`item${this.props.waveformData.mute ? ' active' : ''}`}
+                            onClick={this.props.toggleMute}
+                        >
+                            mute
+                        </button>
                     </div>
                 </div>
                 <div class="beats">

@@ -101,6 +101,8 @@ class App extends Component {
             waveforms: [{
                 active: true,
                 waveform: initialWave.slice(),
+                mute: false,
+                solo: false,
                 beats: boolArray.update(boolArray.create(initBeats), 0, true)
             }],
             numBeats: initBeats,
@@ -122,12 +124,23 @@ class App extends Component {
 
     editingWaveform = () => this.state.waveforms[this.state.editingWaveformIdx].waveform
 
-    activeWaveforms = () => this.state.waveforms.reduce((accum, val) => {
-        if (val.beats[this.state.beat]) {
-            accum.push(val.waveform);
-        }
-        return accum;
-    }, [])
+    activeWaveforms = () => {
+        let hasSolo = false;
+        const waves = this.state.waveforms.reduce((accum, val) => {
+            if (val.beats[this.state.beat]) {
+                let group = 'rest';
+                if (val.solo) {
+                    hasSolo = true;
+                    group = 'solo';
+                }
+                if (!val.mute) {
+                    accum[group].push(val.waveform);
+                }
+            }
+            return accum;
+        }, {solo: [], rest: []});
+        return hasSolo ? waves.solo : waves.rest;
+    }
 
     totalWaveform = () => {
         const allWaves = this.activeWaveforms();

@@ -39,6 +39,10 @@
     background: #f1ddd8;
 }
 
+.wave-manager .item.active {
+    background: red;
+}
+
 .wave-manager.selected .checkbox:not(.beat),
 .wave-manager.selected .checkbox.beat .checkbox-circle,
 .wave-manager.selected .wave-table {
