@@ -28,6 +28,7 @@ export default class waveEditor extends Component {
         this.divRef.addEventListener('mousedown', (ev) => {
             document.addEventListener('mousemove', handleMove);
             helpers.oneTime(document, 'mouseup', (ev) => {
+                handleMove(ev);
                 document.removeEventListener('mousemove', handleMove);
                 this.setState({
                     prevZone: null

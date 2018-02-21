@@ -1,5 +1,6 @@
+const partial = (f, ...args) => (...moreArgs) => f(...args, ...moreArgs);
 export default {
-    partial: (f, ...args) => (...moreArgs) => f(...args, ...moreArgs),
+    partial,
     linear: (m, x, b) => (m * x) + b,
     bounded: (val, min, max) => val < min ? min : (val > max ? max : val),
     scale: (buf, amt) => buf.map(val => val * amt),
@@ -10,6 +11,10 @@ export default {
             handler(ev);
         }
         target.addEventListener(type, doOnce);
+    },
+    soon: (fn, ms=0) => {
+        return (...args) =>
+        window.setTimeout(partial(fn, ...args), ms);
     },
     throttle: (fn, ms) => {
         let time = 0;

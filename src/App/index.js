@@ -129,7 +129,6 @@ class App extends Component {
         return accum;
     }, [])
 
-    //TODO: for some reason, this function ends up modifying the array passed in as a prop to WaveEditor. I probably need to break editor out into viewer as well. But in any case, there should be a nice way to observe changes in the array or at least communicate when a change has happened.
     totalWaveform = () => {
         const allWaves = this.activeWaveforms();
         if (allWaves.length === 0) {
