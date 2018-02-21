@@ -98,6 +98,7 @@ class App extends Component {
         this.state = {
             bpm: 120,
             beat: 0,
+            playing: false,
             waveforms: [{
                 active: true,
                 waveform: initialWave.slice(),
@@ -127,12 +128,12 @@ class App extends Component {
     activeWaveforms = () => {
         let hasSolo = false;
         const waves = this.state.waveforms.reduce((accum, val) => {
-            if (val.beats[this.state.beat]) {
-                let group = 'rest';
-                if (val.solo) {
-                    hasSolo = true;
-                    group = 'solo';
-                }
+            let group = 'rest';
+            if (val.solo) {
+                hasSolo = true;
+                group = 'solo';
+            }
+            if (!this.props.playing || val.beats[this.state.beat]) {
                 if (!val.mute) {
                     accum[group].push(val.waveform);
                 }
@@ -204,10 +205,10 @@ class App extends Component {
 
     metro = () => {
         this.setState({
-            interval: true
+            playing: true
         });
         const loop = () => {
-            if (this.state.interval) {
+            if (this.state.playing) {
                 this.setState({
                     beat: (this.state.beat + 1) % this.state.numBeats
                 })
@@ -218,11 +219,8 @@ class App extends Component {
     }
 
     stopMetro = () => {
-        if (this.state.interval) {
-            window.clearInterval(this.state.interval);
-        }
         this.setState({
-            interval: false,
+            playing: false,
             beat: 0
         })
     }
@@ -291,14 +289,14 @@ class App extends Component {
                 ></WaveEditor>
                 <div class="global-controls">
                     <CircleButton
-                        active={this.state.interval}
+                        active={this.state.playing}
                         action={this.metro}
-                        disabled={this.state.interval}
+                        disabled={this.state.playing}
                     >
                         <div class="triangle"></div>
                     </CircleButton>
                     <CircleButton
-                        active={!this.state.interval}
+                        active={!this.state.playing}
                         action={this.stopMetro}
                     >
                         <div class="rectangle"></div>
