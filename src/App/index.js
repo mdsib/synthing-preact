@@ -239,9 +239,18 @@ class App extends Component {
                             this.addWaveform(this.state.waveforms[idx].waveform.slice(), idx + 1, pleaseActivate);
                     }}
                     activated={idx === this.state.editingWaveformIdx}
-                    waveform={this.state.waveforms[idx].waveform}
-                    beats={this.state.waveforms[idx].beats}
+                    waveformData={this.state.waveforms[idx]}
                     beat={this.state.beat}
+                    toggleMute={() => {
+                            this.updateWaveform(idx, {
+                                mute: !this.state.waveforms[idx].mute
+                            })
+                    }}
+                    toggleSolo={() => {
+                            this.updateWaveform(idx, {
+                                solo: !this.state.waveforms[idx].solo
+                            })
+                    }}
                     updateBeat={(i, val) => {
                             this.updateWaveform(idx, {
                                 beats: boolArray.update(

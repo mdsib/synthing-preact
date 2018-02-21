@@ -28,11 +28,11 @@ export default class WaveManager extends Component {
                         <WaveTable
                             height={40}
                             width={75}
-                            waveform={this.props.waveform.slice()}
+                            waveform={this.props.waveformData.waveform.slice()}
                         />
                     </div>
 
-                    {this.props.beats.map((val, idx) => {
+                    {this.props.waveformData.beats.map((val, idx) => {
                          return (
                              <CheckBox
                                  class={this.props.beat === idx ? 'beat' : ''}
