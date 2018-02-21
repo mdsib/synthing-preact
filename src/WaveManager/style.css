@@ -25,6 +25,8 @@
 
 .wave-manager .buttons .item {
     margin: 0 5px;
+    cursor: pointer;
+    padding: 2px 5px;
 }
 
 .wave-manager .buttons .item:first-child {
@@ -33,6 +35,44 @@
 
 .wave-manager .buttons .item:last-child {
     margin-right: 0;
+}
+
+.wave-manager .buttons button.item {
+    outline: 0;
+    border: 0;
+    background: none;
+}
+
+/* solo button */
+.wave-manager .buttons button.item.solo {
+    opacity: 0.8;
+    color: #0040d1;
+}
+
+.wave-manager .buttons button.item.solo:hover {
+    opacity: 1;
+}
+
+.wave-manager .buttons button.item.solo.active,
+.wave-manager .buttons button.item.solo:active {
+    color: #ffffff;
+    background: #0040d1;
+}
+
+/* mute button */
+.wave-manager .buttons button.item.mute {
+    opacity: 0.8;
+    color: #474747;
+}
+
+.wave-manager .buttons button.item.mute:hover {
+    opacity: 1;
+}
+
+.wave-manager .buttons button.item.mute.active,
+.wave-manager .buttons button.item.mute:active {
+    color: #ffffff;
+    background: #474747;
 }
 
 .wave-manager.selected {

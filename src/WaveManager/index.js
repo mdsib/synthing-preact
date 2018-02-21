@@ -11,22 +11,20 @@ export default class WaveManager extends Component {
             <div class={`wave-manager${modeClass}`}>
                 <div class="buttons">
                     <div class="left-button-group">
-                        {this.props.activated ? (
-                             <div>
-                                 <button class="item" onClick={this.props.remove}>remove</button>
-                                 <button class="item" onClick={this.props.duplicate}>dupe</button>
-                             </div>
-                        ) : ''}
+                        <div>
+                            <button class="item" onClick={this.props.remove}>remove</button>
+                            <button class="item" onClick={this.props.duplicate}>dupe</button>
+                        </div>
                     </div>
                     <div class="right-button-group">
                         <button
-                            class={`item${this.props.waveformData.solo ? ' active' : ''}`}
+                            class={`item solo${this.props.waveformData.solo ? ' active' : ''}`}
                             onClick={this.props.toggleSolo}
                         >
                             solo
                         </button>
                         <button
-                            class={`item${this.props.waveformData.mute ? ' active' : ''}`}
+                            class={`item mute${this.props.waveformData.mute ? ' active' : ''}`}
                             onClick={this.props.toggleMute}
                         >
                             mute

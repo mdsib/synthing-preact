@@ -320,7 +320,9 @@ class App extends Component {
                     />
                     <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
                 </div>
+                <div class="wave-manager-container">
                 {waves}
+                </div>
                 <button onClick={() => this.addWaveform()}>+</button>
                 <Synth waveform={this.totalWaveform()} adsr={this.state.adsr}></Synth>
             </div>
