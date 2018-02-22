@@ -43,14 +43,17 @@
     background: none;
 }
 
-/* solo button */
-.wave-manager .buttons button.item.solo {
+.wave-manager .buttons .item {
     opacity: 0.8;
-    color: #0040d1;
+}
+.wave-manager .buttons .item:hover {
+    opacity: 1;
 }
 
-.wave-manager .buttons button.item.solo:hover {
-    opacity: 1;
+
+/* solo button */
+.wave-manager .buttons button.item.solo {
+    color: #0040d1;
 }
 
 .wave-manager .buttons button.item.solo.active,
@@ -61,12 +64,7 @@
 
 /* mute button */
 .wave-manager .buttons button.item.mute {
-    opacity: 0.8;
     color: #474747;
-}
-
-.wave-manager .buttons button.item.mute:hover {
-    opacity: 1;
 }
 
 .wave-manager .buttons button.item.mute.active,
@@ -87,4 +85,12 @@
 .wave-manager.selected .checkbox.beat .checkbox-circle,
 .wave-manager.selected .wave-table {
     background: #fff;
+}
+
+.wave-manager .icon-ex:before {
+    color: red;
+}
+
+.wave-manager .icon-dupe:before {
+    color: green;
 }

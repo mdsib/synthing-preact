@@ -6,6 +6,7 @@ import CircleButton from '../CircleButton/';
 import Param from '../Param/';
 import Wheel from '../Wheel/';
 import './App.css';
+import '../iconfont/style.css';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
 

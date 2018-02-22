@@ -12,8 +12,18 @@ export default class WaveManager extends Component {
                 <div class="buttons">
                     <div class="left-button-group">
                         <div>
-                            <button class="item" onClick={this.props.remove}>remove</button>
-                            <button class="item" onClick={this.props.duplicate}>dupe</button>
+                            <button
+                                class="item"
+                                onClick={this.props.remove}
+                            >
+                                <span class="icon-ex"></span>
+                            </button>
+                            <button
+                                class="item"
+                                onClick={this.props.duplicate}
+                            >
+                                <span class="icon-dupe"></span>
+                            </button>
                         </div>
                     </div>
                     <div class="right-button-group">
