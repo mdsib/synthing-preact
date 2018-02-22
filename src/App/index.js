@@ -134,7 +134,7 @@ class App extends Component {
                 hasSolo = true;
                 group = 'solo';
             }
-            if (!this.props.playing || val.beats[this.state.beat]) {
+            if (!this.state.playing || val.beats[this.state.beat]) {
                 if (!val.mute) {
                     accum[group].push(val.waveform);
                 }
@@ -188,7 +188,7 @@ class App extends Component {
         if (isEditing) {
             state.editingWaveformIdx = at;
         }
-        
+
         this.setState(state);
     }
     setBeats = (newNumBeats) => {
