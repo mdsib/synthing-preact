@@ -14,13 +14,7 @@ export default class Param extends Component {
             }
             this.props.update(newVal);
         }
-        this.paramRef.addEventListener('mousedown', (ev) => {
-            ev.preventDefault();
-            document.addEventListener('mousemove', handleMove);
-            helpers.oneTime(document, 'mouseup', (ev) => {
-                document.removeEventListener('mousemove', handleMove);
-            });
-        });
+        helpers.clickNDrag(this.paramRef, null, handleMove, null);
     }
     handleChange(e) {
         this.props.update(e.target.value);
@@ -46,4 +40,3 @@ export default class Param extends Component {
         )
     }
 }
-

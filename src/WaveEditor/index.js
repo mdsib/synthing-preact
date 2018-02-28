@@ -24,17 +24,14 @@ export default class waveEditor extends Component {
                 x: ev.x + window.scrollX,
                 y: ev.y + window.scrollY
             }, this.props.waveform);
-        }
-        this.divRef.addEventListener('mousedown', (ev) => {
-            document.addEventListener('mousemove', handleMove);
-            helpers.oneTime(document, 'mouseup', (ev) => {
-                handleMove(ev);
-                document.removeEventListener('mousemove', handleMove);
-                this.setState({
-                    prevZone: null
-                });
-            });
-        });
+        };
+        const handleUp = (ev) => {
+            handleMove(ev);
+            this.setState({
+                prevZone: null
+            })
+        };
+        helpers.clickNDrag(this.divRef, null, handleMove, handleUp);
     }
     componentWillUpdate() {
         return false;
@@ -69,7 +66,7 @@ export default class waveEditor extends Component {
             prevZone: zone
         });
         this.props.updateWaveform(newWaveform);
-        
+
     }
     render() {
         return (
