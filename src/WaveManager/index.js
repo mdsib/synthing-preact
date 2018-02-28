@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import CheckBox from '../CheckBox/';
 import WaveTable from '../WaveTable/';
+import Volume from '../Volume/';
 import helpers from '../helpers';
 import './style.css';
 
@@ -39,11 +40,16 @@ export default class WaveManager extends Component {
                         >
                             mute
                         </button>
+                        <Volume
+                            volume={this.props.volume}
+                            update={this.props.updateVolume}
+                        />
                     </div>
                 </div>
                 <div class="beats">
                     <div onClick={this.props.activate}>
                         <WaveTable
+                            resize={true}
                             height={40}
                             width={75}
                             waveform={this.props.waveformData.waveform.slice()}

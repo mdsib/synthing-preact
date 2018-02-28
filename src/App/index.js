@@ -3,6 +3,7 @@ import WaveEditor from '../WaveEditor/';
 import WaveManager from '../WaveManager/';
 import Synth from '../Synth/';
 import CircleButton from '../CircleButton/';
+import WaveTable from '../WaveTable/';
 import Param from '../Param/';
 import Wheel from '../Wheel/';
 import './App.css';
@@ -103,6 +104,7 @@ class App extends Component {
             waveforms: [{
                 active: true,
                 waveform: initialWave.slice(),
+                volume: 0.7,
                 mute: false,
                 solo: false,
                 beats: boolArray.update(boolArray.create(initBeats), 0, true)
@@ -136,7 +138,7 @@ class App extends Component {
             }
             if (!this.state.playing || val.beats[this.state.beat]) {
                 if (!val.mute) {
-                    accum[group].push(val.waveform);
+                    accum[group].push(val);
                 }
             }
             return accum;
@@ -151,7 +153,7 @@ class App extends Component {
         }
         const firstWave = allWaves.shift();
         return allWaves.reduce(
-            (totalArray, currWaveform, i) => totalArray.map((val, j) => ((val * (i + 1)) + currWaveform[j]) / (i + 2)),
+            (totalArray, currWaveform, i) => totalArray.map((val, j) => ((val * (i + 1)) + (currWaveform[j].waveform * currWaveform[j].volume)) / (i + 2)),
             firstWave
         )
     }
@@ -272,6 +274,12 @@ class App extends Component {
                                 )
                             });
                     }}
+                    volume={this.state.waveforms[idx].volume}
+                    updateVolume={(volume) => {
+                            this.updateWaveform(idx, {
+                                volume
+                            });
+                    }}
                 ></WaveManager>
             );
         })
@@ -280,7 +288,11 @@ class App extends Component {
                 className="App"
                 onKeyDown={this.keyHandler}
             >
-                <h1>synthing</h1>
+                <div>
+                    <h1>synthing
+                    <WaveTable myStyle="float:right; margin-right: 10px; margin-top: -5px;" height={50} width={100} waveform={this.totalWaveform()} />
+                    </h1>
+                </div>
                 <WaveEditor
                     mouseData={this.state.mouseData}
                     waveform={this.editingWaveform()}

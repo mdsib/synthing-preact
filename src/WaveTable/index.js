@@ -24,12 +24,18 @@ export default class WaveTable extends Component {
         this.drawArea = helpers.throttle(drawArea, 30);
     }
     componentWillUpdate() {
-        return false;
+        return this.props.resize;
     }
     componentDidMount() {
         this.drawArea(this.props.waveform, this.canvasRef);
         if (this.props.setCanvasRef) {
             this.props.setCanvasRef(this.canvasRef);
+        }
+        if (this.props.resize) {
+            window.addEventListener('resize', (ev) => {
+                console.log('yo', this.forceUpdate)
+                this.forceUpdate();
+            })
         }
     }
     componentWillReceiveProps(newProps) {
@@ -41,7 +47,7 @@ export default class WaveTable extends Component {
         return (
             <canvas
                 class="wave-table"
-                style={`color: red; height: ${height}px; width: ${width}px`}
+                style={`${this.props.myStyle}; color: red; height: ${height}px; width: ${width}px`}
                 height={height}
                 width={width}
                 ref={(canvas) => {this.canvasRef = canvas}}>
