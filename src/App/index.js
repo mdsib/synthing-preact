@@ -155,8 +155,8 @@ class App extends Component {
               (((curVal * iteration) + valToAdd) / (iteration + 1));
         const firstTone = tones.shift();
         return tones.reduce(
-            (totalArray, currTone, i) => (
-                totalArray.map(
+            (totalWaveform, currTone, i) => (
+                totalWaveform.map(
                     (val, j) => (
                         runningAverage(
                             val,
@@ -167,7 +167,7 @@ class App extends Component {
                 )
 
             ),
-            firstTone.waveform
+            helpers.scale(firstTone.waveform, firstTone.volume)
         );
     }
 
