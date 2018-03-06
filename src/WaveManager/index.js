@@ -29,13 +29,13 @@ export default class WaveManager extends Component {
                     </div>
                     <div class="right-button-group">
                         <button
-                            class={`item solo${this.props.waveformData.solo ? ' active' : ''}`}
+                            class={`item solo${this.props.tone.solo ? ' active' : ''}`}
                             onClick={this.props.toggleSolo}
                         >
                             solo
                         </button>
                         <button
-                            class={`item mute${this.props.waveformData.mute ? ' active' : ''}`}
+                            class={`item mute${this.props.tone.mute ? ' active' : ''}`}
                             onClick={this.props.toggleMute}
                         >
                             mute
@@ -52,11 +52,11 @@ export default class WaveManager extends Component {
                             resize={true}
                             height={40}
                             width={75}
-                            waveform={this.props.waveformData.waveform.slice()}
+                            waveform={this.props.tone.waveform.slice()}
                         />
                     </div>
 
-                    {this.props.waveformData.beats.map((val, idx) => {
+                    {this.props.tone.beats.map((val, idx) => {
                          return (
                              <CheckBox
                                  class={this.props.beat === idx ? 'beat' : ''}

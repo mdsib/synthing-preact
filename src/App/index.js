@@ -101,7 +101,7 @@ class App extends Component {
             bpm: 120,
             beat: 0,
             playing: false,
-            waveforms: [{
+            tones: [{
                 active: true,
                 waveform: initialWave.slice(),
                 volume: 0.7,
@@ -110,7 +110,7 @@ class App extends Component {
                 beats: boolArray.update(boolArray.create(initBeats), 0, true)
             }],
             numBeats: initBeats,
-            editingWaveformIdx: 0,
+            editingToneIdx: 0,
             adsr: {
                 attack: 0.3,
                 decay: 1,
@@ -126,11 +126,11 @@ class App extends Component {
         });
     }
 
-    editingWaveform = () => this.state.waveforms[this.state.editingWaveformIdx].waveform
+    editingWaveform = () => this.state.tones[this.state.editingToneIdx].waveform
 
-    activeWaveforms = () => {
+    activeTones = () => {
         let hasSolo = false;
-        const waves = this.state.waveforms.reduce((accum, val) => {
+        const waves = this.state.tones.reduce((accum, val) => {
             let group = 'rest';
             if (val.solo) {
                 hasSolo = true;
@@ -147,57 +147,78 @@ class App extends Component {
     }
 
     totalWaveform = () => {
-        const allWaves = this.activeWaveforms();
-        if (allWaves.length === 0) {
+        const tones = this.activeTones();
+        if (tones.length === 0) {
             return new Array(consts.BUF_SIZE).fill(0);
         }
-        const firstWave = allWaves.shift();
-        return allWaves.reduce(
-            (totalArray, currWaveform, i) => totalArray.map((val, j) => ((val * (i + 1)) + (currWaveform[j].waveform * currWaveform[j].volume)) / (i + 2)),
-            firstWave
-        )
+        const runningAverage = (curVal, valToAdd, iteration) =>
+              (((curVal * iteration) + valToAdd) / (iteration + 1));
+        const firstTone = tones.shift();
+        return tones.reduce(
+            (totalArray, currTone, i) => (
+                totalArray.map(
+                    (val, j) => (
+                        runningAverage(
+                            val,
+                            currTone.waveform[j] * currTone.volume,
+                            i + 1
+                        )
+                    )
+                )
+
+            ),
+            firstTone.waveform
+        );
     }
 
-    updateWaveform = (idx = this.state.editingWaveformIdx, opts) => {
+    updateTone = (idx = this.state.editingToneIdx, opts) => {
         this.setState({
-            waveforms: immObjArray.update(this.state.waveforms, idx, opts)
+            tones: immObjArray.update(this.state.tones, idx, opts)
         });
     }
 
-    removeWaveform = (idx) => {
-        const waveforms = immObjArray.remove(this.state.waveforms, idx);
+    removeTone = (idx) => {
+        const tones = immObjArray.remove(this.state.tones, idx);
         this.setState({
-            waveforms,
-            editingWaveformIdx: Math.min(
-                this.state.editingWaveformIdx,
-                waveforms.length - 1
+            tones,
+            editingToneIdx: Math.min(
+                this.state.editingToneIdx,
+                tones.length - 1
             )
         });
     }
 
-    changeEditingWaveform = (i) => this.setState({editingWaveformIdx: i})
+    changeEditingTone = (i) => this.setState({editingToneIdx: i})
 
-    addWaveform = (waveform = initialWave.slice(), at = this.state.waveforms.length, isEditing = false) => {
-        const waveforms = immObjArray.add(this.state.waveforms, at, {
+    addTone = (
+        waveform = initialWave.slice(),
+        at = this.state.tones.length,
+        isEditing = false
+    ) => {
+        const tones = immObjArray.add(this.state.tones, at, {
             waveform,
-            beats: boolArray.create(this.state.numBeats)
+            beats: boolArray.create(this.state.numBeats),
+            volume: 0.7,
+            mute: false,
+            solo: false
         });
 
         const state = {
-            waveforms
+            tones
         };
 
         if (isEditing) {
-            state.editingWaveformIdx = at;
+            state.editingToneIdx = at;
         }
 
         this.setState(state);
     }
+
     setBeats = (newNumBeats) => {
         newNumBeats = Math.max(newNumBeats, 1);
         this.setState({
             numBeats: newNumBeats,
-            waveforms: this.state.waveforms.map((val, idx) => {
+            tones: this.state.tones.map((val, idx) => {
                 let ret = Object.assign({}, val, {
                     beats: boolArray.setLength(val.beats, newNumBeats)
                 });
@@ -240,43 +261,43 @@ class App extends Component {
     }
 
     render() {
-        const waves = this.state.waveforms.map((form, idx) => {
+        const waves = this.state.tones.map((form, idx) => {
             return (
                 <WaveManager
-                    activate={this.changeEditingWaveform.bind(this, idx)}
-                    remove={this.removeWaveform.bind(this, idx)}
+                    activate={this.changeEditingTone.bind(this, idx)}
+                    remove={this.removeTone.bind(this, idx)}
                     duplicate={() => {
                             let pleaseActivate = false;
-                            if (this.state.editingWaveformIdx === idx) {
+                            if (this.state.editingToneIdx === idx) {
                                 pleaseActivate = true;
                             }
-                            this.addWaveform(this.state.waveforms[idx].waveform.slice(), idx + 1, pleaseActivate);
+                            this.addTone(this.state.tones[idx].waveform.slice(), idx + 1, pleaseActivate);
                     }}
-                    activated={idx === this.state.editingWaveformIdx}
-                    waveformData={this.state.waveforms[idx]}
+                    activated={idx === this.state.editingToneIdx}
+                    tone={this.state.tones[idx]}
                     beat={this.state.beat}
                     toggleMute={() => {
-                            this.updateWaveform(idx, {
-                                mute: !this.state.waveforms[idx].mute
+                            this.updateTone(idx, {
+                                mute: !this.state.tones[idx].mute
                             })
                     }}
                     toggleSolo={() => {
-                            this.updateWaveform(idx, {
-                                solo: !this.state.waveforms[idx].solo
+                            this.updateTone(idx, {
+                                solo: !this.state.tones[idx].solo
                             })
                     }}
                     updateBeat={(i, val) => {
-                            this.updateWaveform(idx, {
+                            this.updateTone(idx, {
                                 beats: boolArray.update(
-                                    this.state.waveforms[idx].beats,
+                                    this.state.tones[idx].beats,
                                     i,
                                     val
                                 )
                             });
                     }}
-                    volume={this.state.waveforms[idx].volume}
+                    volume={this.state.tones[idx].volume}
                     updateVolume={(volume) => {
-                            this.updateWaveform(idx, {
+                            this.updateTone(idx, {
                                 volume
                             });
                     }}
@@ -290,14 +311,13 @@ class App extends Component {
             >
                 <div>
                     <h1>synthing
-                    <WaveTable myStyle="float:right; margin-right: 10px; margin-top: -5px;" height={50} width={100} waveform={this.totalWaveform()} />
                     </h1>
                 </div>
                 <WaveEditor
                     mouseData={this.state.mouseData}
                     waveform={this.editingWaveform()}
                     updateWaveform={(waveform) => {
-                            this.updateWaveform(this.state.editingWaveformIdx, {waveform});
+                            this.updateTone(this.state.editingToneIdx, {waveform});
                     }}
                 ></WaveEditor>
                 <div class="global-controls">
@@ -336,7 +356,7 @@ class App extends Component {
                 <div class="wave-manager-container">
                 {waves}
                 </div>
-                <button onClick={() => this.addWaveform()}>+</button>
+                <button onClick={() => this.addTone()}>+</button>
                 <Synth waveform={this.totalWaveform()} adsr={this.state.adsr}></Synth>
             </div>
         );

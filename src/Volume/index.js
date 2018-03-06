@@ -2,7 +2,6 @@ import { h, Component } from 'preact';
 import './style.css';
 
 export default (props) => {
-    console.log(props);
     return (
         <div class="Volume">
             <span class="icon-volume"></span>

@@ -29,21 +29,10 @@ export default class Synth extends Component {
     }
     render() {
         return null;
-   } 
-}
-
-function combineWaveforms(waveforms) {
-    const res = new Array(consts.BUF_SIZE).fill(0);
-    waveforms.forEach((waveform) => {
-        waveform.forEach((amplitude, idx) => {
-            res[idx] += amplitude;
-        })
-    })
-    return res;
+   }
 }
 
 function updateAudio(waveform) {
-    //const waveform = combineWaveforms(waveforms);
     FFT.forward(waveform);
     const periodicWave = ac.createPeriodicWave(
         new Float32Array(FFT.real),
