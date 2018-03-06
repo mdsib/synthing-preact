@@ -1,15 +1,10 @@
 .volume-triangle {
-    position: absolute;
-    top: 0;
-    left: 0;
     display: inline-block;
     border: 8px solid transparent;
     border-right-color: black;
     border-right-width: 30px;
     border-left-width: 0px;
     height: 0px;
-    margin-bottom: -2px;
-    margin-left: 2px;
 }
 
 .volume-triangle.-background {
@@ -17,10 +12,13 @@
 }
 
 .volume-triangle.-foreground {
+    position: absolute;
+    top: 0;
+    left: 0;
     transform-origin: left;
 }
 
 .volume-triangle-container {
+    display: inline-block;
     position: relative;
-    width: 20px;
 }

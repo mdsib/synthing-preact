@@ -34,9 +34,11 @@ export default class Synth extends Component {
 
 function updateAudio(waveform) {
     FFT.forward(waveform);
+    //TODO: test what disableNormalization does. I'm guessing it allows me to have volume control, otherwise it would scale wave so max displacement is -1/1 instead of smaller val
     const periodicWave = ac.createPeriodicWave(
         new Float32Array(FFT.real),
-        new Float32Array(FFT.imag)
+        new Float32Array(FFT.imag),
+        {disableNormalization: true}
     );
     P.changeWave(periodicWave);
 }
