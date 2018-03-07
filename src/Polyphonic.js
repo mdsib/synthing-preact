@@ -3,9 +3,16 @@ import Envelope from 'envelope-generator';
 
 export default class Polyphonic {
     constructor(audioContext) {
+        const masterVol = audioContext.createGain();
+        masterVol.gain.value = 0.7;
+        masterVol.connect(audioContext.destination);
         this.voices = {};
         this.audioContext = audioContext;
         this.periodicWave = null;
+        this.masterVolume = masterVol;
+    }
+    setVolume(newVol) {
+        this.masterVolume.gain.value = newVol;
     }
     addVoice(note, adsr) {
         this.voices[note.note] = this.voices[note.note] || [];
@@ -28,7 +35,7 @@ export default class Polyphonic {
 
         envelope.connect(gain.gain);
         osc.connect(gain);
-        gain.connect(this.audioContext.destination);
+        gain.connect(this.masterVolume);
 
         osc.start();
         envelope.start(this.audioContext.currentTime - 0.1);

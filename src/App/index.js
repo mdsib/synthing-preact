@@ -4,6 +4,7 @@ import WaveManager from '../WaveManager/';
 import Synth from '../Synth/';
 import CircleButton from '../CircleButton/';
 import WaveTable from '../WaveTable/';
+import Volume from '../Volume/';
 import Param from '../Param/';
 import Wheel from '../Wheel/';
 import './App.css';
@@ -98,6 +99,7 @@ class App extends Component {
         super();
         let initBeats = 4;
         this.state = {
+            volume: 0.7,
             bpm: 120,
             beat: 0,
             playing: false,
@@ -123,6 +125,12 @@ class App extends Component {
     updateAdsr = (aspect, val) => {
         this.setState({
             adsr: Object.assign({}, this.state.adsr, {[aspect]: val})
+        });
+    }
+
+    updateVolume = (newVol) => {
+        this.setState({
+            volume: newVol
         });
     }
 
@@ -261,7 +269,7 @@ class App extends Component {
     }
 
     render() {
-        const waves = this.state.tones.map((form, idx) => {
+        const tones = this.state.tones.map((form, idx) => {
             return (
                 <WaveManager
                     activate={this.changeEditingTone.bind(this, idx)}
@@ -352,12 +360,17 @@ class App extends Component {
                         update={this.setBeats}
                     />
                     <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
+                    <Volume volume={this.state.volume} update={this.updateVolume} />
                 </div>
                 <div class="wave-manager-container">
-                {waves}
+                {tones}
                 </div>
                 <button onClick={() => this.addTone()}>+</button>
-                <Synth waveform={this.totalWaveform()} adsr={this.state.adsr}></Synth>
+                <Synth
+                    waveform={this.totalWaveform()}
+                    volume={this.state.volume}
+                    adsr={this.state.adsr}
+                ></Synth>
             </div>
         );
     }

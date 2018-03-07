@@ -27,6 +27,7 @@
     margin: 0 5px;
     cursor: pointer;
     padding: 2px 5px;
+    font-size: 10pt;
 }
 
 .wave-manager .buttons .item:first-child {
@@ -43,10 +44,10 @@
     background: none;
 }
 
-.wave-manager .buttons .item {
+.wave-manager .buttons button.item {
     opacity: 0.8;
 }
-.wave-manager .buttons .item:hover {
+.wave-manager .buttons button.item:hover {
     opacity: 1;
 }
 

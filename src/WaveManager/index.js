@@ -43,7 +43,10 @@ export default class WaveManager extends Component {
                         <Volume
                             volume={this.props.volume}
                             update={this.props.updateVolume}
-                        />
+                            class="item"
+                        >
+                            <span>mix</span>
+                        </Volume>
                     </div>
                 </div>
                 <div class="beats">

@@ -33,7 +33,6 @@ export default class WaveTable extends Component {
         }
         if (this.props.resize) {
             window.addEventListener('resize', (ev) => {
-                console.log('yo', this.forceUpdate)
                 this.forceUpdate();
             })
         }
