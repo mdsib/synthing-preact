@@ -4,7 +4,7 @@ import WaveManager from '../WaveManager/';
 import Synth from '../Synth/';
 import CircleButton from '../CircleButton/';
 import WaveTable from '../WaveTable/';
-import Volume from '../Volume/';
+import HSlider from '../HSlider/';
 import Param from '../Param/';
 import Wheel from '../Wheel/';
 import './App.css';
@@ -106,7 +106,7 @@ class App extends Component {
             tones: [{
                 active: true,
                 waveform: initialWave.slice(),
-                volume: 0.7,
+                mix: 0.7,
                 mute: false,
                 solo: false,
                 beats: boolArray.update(boolArray.create(initBeats), 0, true)
@@ -168,14 +168,14 @@ class App extends Component {
                     (val, j) => (
                         runningAverage(
                             val,
-                            currTone.waveform[j] * currTone.volume,
+                            currTone.waveform[j] * currTone.mix,
                             i + 1
                         )
                     )
                 )
 
             ),
-            helpers.scale(firstTone.waveform, firstTone.volume)
+            helpers.scale(firstTone.waveform, firstTone.mix)
         );
     }
 
@@ -206,7 +206,7 @@ class App extends Component {
         const tones = immObjArray.add(this.state.tones, at, {
             waveform,
             beats: boolArray.create(this.state.numBeats),
-            volume: 0.7,
+            mix: 0.7,
             mute: false,
             solo: false
         });
@@ -303,10 +303,10 @@ class App extends Component {
                                 )
                             });
                     }}
-                    volume={this.state.tones[idx].volume}
-                    updateVolume={(volume) => {
+                    mix={this.state.tones[idx].mix}
+                    updateMix={(mix) => {
                             this.updateTone(idx, {
-                                volume
+                                mix
                             });
                     }}
                 ></WaveManager>
@@ -360,7 +360,7 @@ class App extends Component {
                         update={this.setBeats}
                     />
                     <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
-                    <Volume volume={this.state.volume} update={this.updateVolume} />
+                    <HSlider value={this.state.volume} update={this.updateVolume} />
                 </div>
                 <div class="wave-manager-container">
                 {tones}

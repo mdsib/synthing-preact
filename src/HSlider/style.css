@@ -1,4 +1,4 @@
-.volume-triangle {
+.hslider-triangle {
     display: inline-block;
     border: 8px solid transparent;
     border-right-color: black;
@@ -7,23 +7,23 @@
     height: 0px;
 }
 
-.volume-triangle.-background {
+.hslider-triangle.-background {
     opacity: 0.3;
 }
 
-.volume-triangle.-foreground {
+.hslider-triangle.-foreground {
     position: absolute;
     top: 0;
     left: 0;
     transform-origin: left;
 }
 
-.volume-triangle-container {
+.hslider-triangle-container {
     display: inline-flex;
     position: relative;
     margin-left: 2px;
 }
 
-.Volume {
+.HSlider {
     display: inline-flex;
 }

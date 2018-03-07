@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import CheckBox from '../CheckBox/';
 import WaveTable from '../WaveTable/';
-import Volume from '../Volume/';
+import HSlider from '../HSlider/';
 import helpers from '../helpers';
 import './style.css';
 
@@ -40,13 +40,13 @@ export default class WaveManager extends Component {
                         >
                             mute
                         </button>
-                        <Volume
-                            volume={this.props.volume}
-                            update={this.props.updateVolume}
+                        <HSlider
+                            value ={this.props.mix}
+                            update={this.props.updateMix}
                             class="item"
                         >
                             <span>mix</span>
-                        </Volume>
+                        </HSlider>
                     </div>
                 </div>
                 <div class="beats">
