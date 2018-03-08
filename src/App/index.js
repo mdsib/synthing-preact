@@ -11,6 +11,7 @@ import './App.css';
 import '../iconfont/style.css';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
+import { Provider, connect } from 'preact-redux';
 
 const initialWave = new Array(consts.BUF_SIZE)
     .fill(0)
@@ -99,7 +100,6 @@ class App extends Component {
         super();
         let initBeats = 4;
         this.state = {
-            volume: 0.7,
             bpm: 120,
             beat: 0,
             playing: false,
@@ -125,12 +125,6 @@ class App extends Component {
     updateAdsr = (aspect, val) => {
         this.setState({
             adsr: Object.assign({}, this.state.adsr, {[aspect]: val})
-        });
-    }
-
-    updateVolume = (newVol) => {
-        this.setState({
-            volume: newVol
         });
     }
 
@@ -360,7 +354,7 @@ class App extends Component {
                         update={this.setBeats}
                     />
                     <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
-                    <HSlider value={this.state.volume} update={this.updateVolume} />
+                    <HSlider value={this.props.volume} update={this.props.setVol} />
                 </div>
                 <div class="wave-manager-container">
                 {tones}
@@ -368,7 +362,7 @@ class App extends Component {
                 <button onClick={() => this.addTone()}>+</button>
                 <Synth
                     waveform={this.totalWaveform()}
-                    volume={this.state.volume}
+                    volume={this.props.volume}
                     adsr={this.state.adsr}
                 ></Synth>
             </div>
