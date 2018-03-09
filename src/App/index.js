@@ -153,7 +153,7 @@ class App extends Component {
             return new Array(consts.BUF_SIZE).fill(0);
         }
         const runningAverage = (curVal, valToAdd, iteration) =>
-              (((curVal * iteration) + valToAdd) / (iteration + 1));
+            (((curVal * iteration) + valToAdd) / (iteration + 1));
         const firstTone = tones.shift();
         return tones.reduce(
             (totalWaveform, currTone, i) => (
@@ -350,7 +350,7 @@ class App extends Component {
                     <HSlider value={this.props.volume} update={this.props.setVol} />
                 </div>
                 <div class="wave-manager-container">
-                {tones}
+                    {tones}
                 </div>
                 <button onClick={() => this.addTone()}>+</button>
                 <Synth
