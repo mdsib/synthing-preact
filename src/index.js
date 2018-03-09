@@ -7,7 +7,8 @@ import { Provider, connect } from 'preact-redux';
 import { store } from './store.js';
 
 const ConnectedApp = connect(state => state, {
-    setVol: (newVol) => ({type: 'SET_VOL', volume: newVol})
+    setVol: (newVal) => ({type: 'SET_GLOBAL_VOL', value: newVal}),
+    setBpm: (newVal) => ({type: 'SET_GLOBAL_BPM', value: newVal})
 })(App);
 
 const InformedApp = <Provider store={store}><ConnectedApp /></Provider>;

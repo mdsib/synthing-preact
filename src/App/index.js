@@ -100,7 +100,6 @@ class App extends Component {
         super();
         let initBeats = 4;
         this.state = {
-            bpm: 120,
             beat: 0,
             playing: false,
             tones: [{
@@ -238,7 +237,7 @@ class App extends Component {
                 this.setState({
                     beat: (this.state.beat + 1) % this.state.numBeats
                 })
-                window.setTimeout(loop, (1 / this.state.bpm) * 60000);
+                window.setTimeout(loop, (1 / this.props.bpm) * 60000);
             }
         }
         loop();
@@ -254,12 +253,6 @@ class App extends Component {
     keyHandler(e) {
         //TODO handle global commands, maybe some modal stuff even wow
         console.log('wow i got through', e.key);
-    }
-
-    setBpm = (newBpm) => {
-        this.setState({
-            bpm: newBpm
-        });
     }
 
     render() {
@@ -342,8 +335,8 @@ class App extends Component {
                         minVal={20}
                         maxVal={600}
                         step={1}
-                        val={this.state.bpm}
-                        update={this.setBpm}
+                        val={this.props.bpm}
+                        update={this.props.setBpm}
                     />
                     <Param
                         name="beats"

@@ -1,13 +1,19 @@
 import { createStore } from 'redux';
 
 const initialState = {
-    volume: 0.7
+    volume: 0.7,
+    bpm: 120,
 };
 
 const reducer = (state, action) => {
     let updates = {};
-    if (action.type === 'SET_VOL') {
-        updates.volume = action.volume;
+    switch (action.type) {
+    case 'SET_GLOBAL_VOL':
+        updates.volume = action.value;
+        break;
+    case 'SET_GLOBAL_BPM':
+        updates.bpm = action.value;
+        break;
     }
     return Object.assign({}, state, updates);
 }
