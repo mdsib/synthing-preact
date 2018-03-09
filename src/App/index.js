@@ -100,8 +100,6 @@ class App extends Component {
         super();
         let initBeats = 4;
         this.state = {
-            beat: 0,
-            playing: false,
             tones: [{
                 active: true,
                 waveform: initialWave.slice(),
@@ -137,7 +135,7 @@ class App extends Component {
                 hasSolo = true;
                 group = 'solo';
             }
-            if (!this.state.playing || val.beats[this.state.beat]) {
+            if (!this.props.playing || val.beats[this.props.beat]) {
                 if (!val.mute) {
                     accum[group].push(val);
                 }
@@ -228,26 +226,25 @@ class App extends Component {
         })
     }
 
+    //TODO this could be part of the reducer, and sending PLAY action can start it. Wonder how that can be done without side effects? Or if it should.
     metro = () => {
-        this.setState({
-            playing: true
-        });
+        this.props.setPlaying(true);
         const loop = () => {
-            if (this.state.playing) {
-                this.setState({
-                    beat: (this.state.beat + 1) % this.state.numBeats
-                })
+            if (this.props.playing) {
+                console.log('playing');
+                this.props.setBeat((this.props.beat + 1) % this.state.numBeats);
                 window.setTimeout(loop, (1 / this.props.bpm) * 60000);
             }
         }
-        loop();
+        // give redux a chance to convey it's playing, a good sign of a bad design.
+        // i like this https://medium.com/@machadogj/timers-in-react-with-redux-apps-9a5a722162e8#Timers in Actions
+        window.setTimeout(loop, 0);
     }
 
     stopMetro = () => {
-        this.setState({
-            playing: false,
-            beat: 0
-        })
+        //TODO this could be one action handler called STOP, rather than composing everything manually like this.
+        this.props.setBeat(0);
+        this.props.setPlaying(false);
     }
 
     keyHandler(e) {
@@ -270,7 +267,7 @@ class App extends Component {
                     }}
                     activated={idx === this.state.editingToneIdx}
                     tone={this.state.tones[idx]}
-                    beat={this.state.beat}
+                    beat={this.props.beat}
                     toggleMute={() => {
                             this.updateTone(idx, {
                                 mute: !this.state.tones[idx].mute
@@ -317,14 +314,14 @@ class App extends Component {
                 ></WaveEditor>
                 <div class="global-controls">
                     <CircleButton
-                        active={this.state.playing}
+                        active={this.props.playing}
                         action={this.metro}
-                        disabled={this.state.playing}
+                        disabled={this.props.playing}
                     >
                         <div class="triangle"></div>
                     </CircleButton>
                     <CircleButton
-                        active={!this.state.playing}
+                        active={!this.props.playing}
                         action={this.stopMetro}
                     >
                         <div class="rectangle"></div>

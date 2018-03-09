@@ -3,6 +3,8 @@ import { createStore } from 'redux';
 const initialState = {
     volume: 0.7,
     bpm: 120,
+    beat: 0,
+    playing: false
 };
 
 const reducer = (state, action) => {
@@ -13,6 +15,12 @@ const reducer = (state, action) => {
         break;
     case 'SET_GLOBAL_BPM':
         updates.bpm = action.value;
+        break;
+    case 'SET_GLOBAL_BEAT':
+        updates.beat = action.value;
+        break;
+    case 'SET_GLOBAL_PLAYING':
+        updates.playing = action.value;
         break;
     }
     return Object.assign({}, state, updates);
