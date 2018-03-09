@@ -347,7 +347,7 @@ class App extends Component {
                         update={this.setBeats}
                     />
                     <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
-                    <HSlider value={this.props.volume} update={this.props.setVol} />
+                    <HSlider value={this.props.volume} update={this.props.setVolume} />
                 </div>
                 <div class="wave-manager-container">
                     {tones}

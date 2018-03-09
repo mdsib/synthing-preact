@@ -8,7 +8,7 @@ const initialState = {
 const reducer = (state, action) => {
     let updates = {};
     switch (action.type) {
-    case 'SET_GLOBAL_VOL':
+    case 'SET_GLOBAL_VOLUME':
         updates.volume = action.value;
         break;
     case 'SET_GLOBAL_BPM':
