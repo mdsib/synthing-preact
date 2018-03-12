@@ -83,11 +83,10 @@ class App extends Component {
                 solo: false,
                 beats: boolArray.update(boolArray.create(4), 0, true)
             }],
-            editingToneIdx: 0
         }
     }
 
-    editingWaveform = () => this.state.tones[this.state.editingToneIdx].waveform
+    editingWaveform = () => this.state.tones[this.props.editingToneIdx].waveform
 
     activeTones = () => {
         let hasSolo = false;
@@ -132,7 +131,7 @@ class App extends Component {
         );
     }
 
-    updateTone = (idx = this.state.editingToneIdx, opts) => {
+    updateTone = (idx = this.props.editingToneIdx, opts) => {
         this.setState({
             tones: immObjArray.update(this.state.tones, idx, opts)
         });
@@ -140,16 +139,14 @@ class App extends Component {
 
     removeTone = (idx) => {
         const tones = immObjArray.remove(this.state.tones, idx);
-        this.setState({
-            tones,
-            editingToneIdx: Math.min(
-                this.state.editingToneIdx,
-                tones.length - 1
-            )
-        });
+        this.setState({ tones });
+        this.props.setEditingToneIdx(Math.min(
+            this.props.editingToneIdx,
+            tones.length - 1
+        ));
     }
 
-    changeEditingTone = (i) => this.setState({editingToneIdx: i})
+    changeEditingTone = (i) => this.props.set({editingToneIdx: i})
 
     addTone = (
         waveform = initialWave.slice(),
@@ -197,16 +194,16 @@ class App extends Component {
         const tones = this.state.tones.map((form, idx) => {
             return (
                 <WaveManager
-                    activate={this.changeEditingTone.bind(this, idx)}
+                    activate={this.props.setEditingToneIdx.bind(null, idx)}
                     remove={this.removeTone.bind(this, idx)}
                     duplicate={() => {
                             let pleaseActivate = false;
-                            if (this.state.editingToneIdx === idx) {
+                            if (this.props.editingToneIdx === idx) {
                                 pleaseActivate = true;
                             }
                             this.addTone(this.state.tones[idx].waveform.slice(), idx + 1, pleaseActivate);
                     }}
-                    activated={idx === this.state.editingToneIdx}
+                    activated={idx === this.props.editingToneIdx}
                     tone={this.state.tones[idx]}
                     beat={this.props.beat}
                     toggleMute={() => {
@@ -250,7 +247,7 @@ class App extends Component {
                     mouseData={this.state.mouseData}
                     waveform={this.editingWaveform()}
                     updateWaveform={(waveform) => {
-                            this.updateTone(this.state.editingToneIdx, {waveform});
+                            this.updateTone(this.props.editingToneIdx, {waveform});
                     }}
                 ></WaveEditor>
                 <div class="global-controls">

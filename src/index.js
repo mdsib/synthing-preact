@@ -7,10 +7,11 @@ import { Provider, connect } from 'preact-redux';
 import { store } from './store.js';
 
 const ConnectedApp = connect(state => Object.assign({}, state.global, {adsr: state.adsr}), {
-    setVolume: (newVal) => ({type: 'SET_GLOBAL_VOLUME', value: newVal}),
-    setBpm: (newVal) => ({type: 'SET_GLOBAL_BPM', value: newVal}),
-    setBeat: (newVal) => ({type: 'SET_GLOBAL_BEAT', value: newVal}),
-    setNumBeats: (newVal) => ({type: 'SET_GLOBAL_NUM_BEATS', value: newVal}),
+    setVolume: (value) => ({type: 'SET_GLOBAL_VOLUME', value}),
+    setBpm: (value) => ({type: 'SET_GLOBAL_BPM', value}),
+    setBeat: (value) => ({type: 'SET_GLOBAL_BEAT', value}),
+    setNumBeats: (value) => ({type: 'SET_GLOBAL_NUM_BEATS', value}),
+    setEditingToneIdx: (value) => ({type: 'SET_EDITING_TONE_IDX', value}),
     startMetro: () => (dispatch, getState) => {
         const tickMetro = {type: 'TICK_METRO'};
         const startMetro = {type: 'START_METRO'};

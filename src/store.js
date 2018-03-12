@@ -8,7 +8,8 @@ const initialState = {
         bpm: 120,
         beat: 0,
         playing: false,
-        numBeats: 4
+        numBeats: 4,
+        editingToneIdx: 0
     },
     adsr: {
         attack: 0.3,
@@ -58,6 +59,9 @@ const globalReducer = (state, action) => {
         case 'STOP_METRO':
             updates.playing = false;
             updates.beat = 0;
+            break;
+        case 'SET_EDITING_TONE_IDX':
+            updates.editingToneIdx = action.value;
             break;
         default:
             break;
