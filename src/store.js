@@ -1,16 +1,41 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import consts from './consts.js';
 
 const initialState = {
-    volume: 0.7,
-    bpm: 120,
-    beat: 0,
-    playing: false,
-    numBeats: 4
+    global: {
+        volume: 0.7,
+        bpm: 120,
+        beat: 0,
+        playing: false,
+        numBeats: 4
+    },
+    adsr: {
+        attack: 0.3,
+        decay: 1,
+        sustain: 0.4,
+        release: 1
+    }
 };
 
-const reducer = (state, action) => {
-    let updates = {};
+const adsrReducer = (state, action) => {
+    const updates = {};
+    const propertiesAllowed = consts.adsrProperties.map(val => val.name);
+    switch (action.type) {
+        case 'SET_ADSR_PROPERTY':
+            console.log(action);
+            if (propertiesAllowed.indexOf(action.property) > -1) {
+                updates[action.property] = action.value
+            }
+            break;
+        default:
+            break;
+    }
+    return Object.assign({}, state, updates);
+}
+
+const globalReducer = (state, action) => {
+    const updates = {};
     switch (action.type) {
         case 'SET_GLOBAL_VOLUME':
             updates.volume = action.value;
@@ -40,7 +65,12 @@ const reducer = (state, action) => {
     return Object.assign({}, state, updates);
 }
 
-const store = createStore(reducer, initialState, applyMiddleware(thunk));
+const reducers = {
+    global: globalReducer,
+    adsr: adsrReducer
+};
+
+const store = createStore(combineReducers(reducers), initialState, applyMiddleware(thunk));
 
 export default store;
 export { store };

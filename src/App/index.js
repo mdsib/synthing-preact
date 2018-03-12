@@ -50,32 +50,10 @@ const boolArray = {
     }
 }
 
-const adsrProperties = [
-    {
-        name: 'attack',
-        suffix: 's',
-        maxVal: 10
-    },
-    {
-        name: 'decay',
-        suffix: 's',
-        maxVal: 10
-    },
-    {
-        name: 'sustain',
-        maxVal: 2
-    },
-    {
-        name: 'release',
-        suffix: 's',
-        maxVal: 30,
-    }
-];
-
 
 const Adsr = (props) => (
     <div style="display: inline-block;">
-        {adsrProperties.map((aspect) => (
+        {consts.adsrProperties.map((aspect) => (
             <Param
                 suffix={aspect.suffix || ''}
                 precision={1}
@@ -105,20 +83,8 @@ class App extends Component {
                 solo: false,
                 beats: boolArray.update(boolArray.create(4), 0, true)
             }],
-            editingToneIdx: 0,
-            adsr: {
-                attack: 0.3,
-                decay: 1,
-                sustain: 0.4,
-                release: 1
-            }
+            editingToneIdx: 0
         }
-    }
-
-    updateAdsr = (aspect, val) => {
-        this.setState({
-            adsr: Object.assign({}, this.state.adsr, {[aspect]: val})
-        });
     }
 
     editingWaveform = () => this.state.tones[this.state.editingToneIdx].waveform
@@ -318,7 +284,7 @@ class App extends Component {
                         val={this.props.numBeats}
                         update={this.setBeats}
                     />
-                    <Adsr adsr={this.state.adsr} update={this.updateAdsr} />
+                    <Adsr adsr={this.props.adsr} update={this.props.setAdsrProperty} />
                     <HSlider value={this.props.volume} update={this.props.setVolume} />
                 </div>
                 <div class="wave-manager-container">
@@ -328,7 +294,7 @@ class App extends Component {
                 <Synth
                     waveform={this.totalWaveform()}
                     volume={this.props.volume}
-                    adsr={this.state.adsr}
+                    adsr={this.props.adsr}
                 ></Synth>
             </div>
         );
