@@ -6,7 +6,7 @@ import 'preact/devtools';
 import { Provider, connect } from 'preact-redux';
 import { store } from './store.js';
 
-const ConnectedApp = connect(state => Object.assign({}, state.global, {adsr: state.adsr}), {
+const ConnectedApp = connect(state => state,  {
     setVolume: (value) => ({type: 'SET_GLOBAL_VOLUME', value}),
     setBpm: (value) => ({type: 'SET_GLOBAL_BPM', value}),
     setBeat: (value) => ({type: 'SET_GLOBAL_BEAT', value}),
@@ -28,7 +28,11 @@ const ConnectedApp = connect(state => Object.assign({}, state.global, {adsr: sta
         loop();
     },
     stopMetro: () => ({type: 'STOP_METRO'}),
-    setAdsrProperty: (property, value) => ({type: 'SET_ADSR_PROPERTY', property, value})
+    setAdsrProperty: (property, value) => ({type: 'SET_ADSR_PROPERTY', property, value}),
+    addTone: (waveform, idx, activate) => ({type: 'ADD_TONE', waveform, idx, activate}),
+    setToneProperty: (idx, property, value) => ({type: 'SET_TONE_PROPERTY', idx, property, value}),
+    deleteTone: (idx) => ({type: 'DELETE_TONE', idx})
+
 })(App);
 
 const InformedApp = <Provider store={store}><ConnectedApp /></Provider>;

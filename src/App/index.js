@@ -11,46 +11,6 @@ import '../iconfont/style.css';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
 
-const initialWave = new Array(consts.BUF_SIZE)
-    .fill(0)
-    .map((val, i) => Math.sin(i / consts.BUF_SIZE * Math.PI * 2));
-
-const immObjArray = {
-    update: (arr, idx, opts) => {
-        const newArr = arr.slice();
-        newArr[idx] = Object.assign({}, arr[idx], opts)
-        return newArr;
-    },
-    add: (arr, idx, opts) => {
-        const newArr = arr.slice();
-        newArr.splice(idx, 0, opts);
-        return newArr;
-    },
-    remove: (arr, idx) => {
-        const newArr = arr.slice();
-        newArr.splice(idx, 1);
-        return newArr;
-    }
-}
-
-const boolArray = {
-    setLength: (ba, newLength) => {
-        let newBa = ba.slice(0, newLength);
-        if (ba.length < newLength) {
-            newBa = newBa.concat(new Array(newLength - ba.length).fill(false));
-        }
-        return newBa;
-    }, create: (length) => {
-        return new Array(length).fill(false);
-    },
-    update: (ba, idx, val) => {
-        const newBa = ba.slice();
-        newBa[idx] = val;
-        return newBa;
-    }
-}
-
-
 const Adsr = (props) => (
     <div style="display: inline-block;">
         {consts.adsrProperties.map((aspect) => (
@@ -70,27 +30,13 @@ const Adsr = (props) => (
     </div>
 )
 
-
 class App extends Component {
-    constructor() {
-        super();
-        this.state = {
-            tones: [{
-                active: true,
-                waveform: initialWave.slice(),
-                mix: 0.7,
-                mute: false,
-                solo: false,
-                beats: boolArray.update(boolArray.create(4), 0, true)
-            }],
-        }
-    }
+    editingWaveform = () => this.props.tones[this.props.editingToneIdx].waveform
 
-    editingWaveform = () => this.state.tones[this.props.editingToneIdx].waveform
-
+    //TODO these can be in redux too, using reselect
     activeTones = () => {
         let hasSolo = false;
-        const waves = this.state.tones.reduce((accum, val) => {
+        const waves = this.props.tones.reduce((accum, val) => {
             let group = 'rest';
             if (val.solo) {
                 hasSolo = true;
@@ -131,106 +77,46 @@ class App extends Component {
         );
     }
 
-    updateTone = (idx = this.props.editingToneIdx, opts) => {
-        this.setState({
-            tones: immObjArray.update(this.state.tones, idx, opts)
-        });
-    }
-
-    removeTone = (idx) => {
-        const tones = immObjArray.remove(this.state.tones, idx);
-        this.setState({ tones });
-        this.props.setEditingToneIdx(Math.min(
-            this.props.editingToneIdx,
-            tones.length - 1
-        ));
-    }
-
-    changeEditingTone = (i) => this.props.set({editingToneIdx: i})
-
-    addTone = (
-        waveform = initialWave.slice(),
-        at = this.state.tones.length,
-        isEditing = false
-    ) => {
-        const tones = immObjArray.add(this.state.tones, at, {
-            waveform,
-            beats: boolArray.create(this.props.numBeats),
-            mix: 0.7,
-            mute: false,
-            solo: false
-        });
-
-        const state = {
-            tones
-        };
-
-        if (isEditing) {
-            state.editingToneIdx = at;
-        }
-
-        this.setState(state);
-    }
-
-    setBeats = (newNumBeats) => {
-        newNumBeats = Math.max(newNumBeats, 1);
-        this.props.setNumBeats(newNumBeats);
-        this.setState({
-            tones: this.state.tones.map((val, idx) => {
-                let ret = Object.assign({}, val, {
-                    beats: boolArray.setLength(val.beats, newNumBeats)
-                });
-                return ret;
-            })
-        })
-    }
-
     keyHandler(e) {
         //TODO handle global commands, maybe some modal stuff even wow
         console.log('wow i got through', e.key);
     }
 
     render() {
-        const tones = this.state.tones.map((form, idx) => {
+        const tones = this.props.tones.map((form, idx) => {
             return (
                 <WaveManager
                     activate={this.props.setEditingToneIdx.bind(null, idx)}
-                    remove={this.removeTone.bind(this, idx)}
+                    remove={this.props.deleteTone.bind(null, idx)}
                     duplicate={() => {
                             let pleaseActivate = false;
                             if (this.props.editingToneIdx === idx) {
                                 pleaseActivate = true;
                             }
-                            this.addTone(this.state.tones[idx].waveform.slice(), idx + 1, pleaseActivate);
+                            this.props.addTone(this.props.tones[idx].waveform.slice(), idx + 1, pleaseActivate);
                     }}
                     activated={idx === this.props.editingToneIdx}
-                    tone={this.state.tones[idx]}
+                    tone={this.props.tones[idx]}
                     beat={this.props.beat}
                     toggleMute={() => {
-                            this.updateTone(idx, {
-                                mute: !this.state.tones[idx].mute
-                            })
+                            this.props.setToneProperty(idx, 'mute', !this.props.tones[idx].mute);
                     }}
                     toggleSolo={() => {
-                            this.updateTone(idx, {
-                                solo: !this.state.tones[idx].solo
-                            })
+                            this.props.setToneProperty(idx, 'solo', !this.props.tones[idx].solo);
                     }}
                     updateBeat={(i, val) => {
-                            this.updateTone(idx, {
-                                beats: boolArray.update(
-                                    this.state.tones[idx].beats,
+                            this.props.setToneProperty(
+                                idx,
+                                'beats',
+                                helpers.boolArray.update(
+                                    this.props.tones[idx].beats,
                                     i,
                                     val
                                 )
-                            });
+                            );
                     }}
-                    mix={this.state.tones[idx].mix}
-                    updateMix={(mix) => {
-                            this.updateTone(idx, {
-                                mix
-                            });
-                    }}
+                    mix={this.props.tones[idx].mix}
+                    updateMix={(mix) => {this.props.setToneProperty(idx, 'mix', mix)}}
                 ></WaveManager>
             );
         })
@@ -247,7 +133,7 @@ class App extends Component {
                     mouseData={this.state.mouseData}
                     waveform={this.editingWaveform()}
                     updateWaveform={(waveform) => {
-                            this.updateTone(this.props.editingToneIdx, {waveform});
+                            this.props.setToneProperty(this.props.editingToneIdx, 'waveform', waveform);
                     }}
                 ></WaveEditor>
                 <div class="global-controls">
@@ -275,11 +161,11 @@ class App extends Component {
                     />
                     <Param
                         name="beats"
-                        minVal="1"
+                        minVal={3}
                         maxVal={16}
                         step="1"
                         val={this.props.numBeats}
-                        update={this.setBeats}
+                        update={this.props.setNumBeats}
                     />
                     <Adsr adsr={this.props.adsr} update={this.props.setAdsrProperty} />
                     <HSlider value={this.props.volume} update={this.props.setVolume} />
@@ -287,7 +173,7 @@ class App extends Component {
                 <div class="wave-manager-container">
                     {tones}
                 </div>
-                <button onClick={() => this.addTone()}>+</button>
+                <button onClick={() => this.props.addTone()}>+</button>
                 <Synth
                     waveform={this.totalWaveform()}
                     volume={this.props.volume}

@@ -42,5 +42,38 @@ export default {
                 }
             });
         })
+    },
+    boolArray: {
+        setLength: (ba, newLength) => {
+            let newBa = ba.slice(0, newLength);
+            if (ba.length < newLength) {
+                newBa = newBa.concat(new Array(newLength - ba.length).fill(false));
+            }
+            return newBa;
+        }, create: (length) => {
+            return new Array(length).fill(false);
+        },
+        update: (ba, idx, val) => {
+            const newBa = ba.slice();
+            newBa[idx] = val;
+            return newBa;
+        }
+    },
+    immObjArray: {
+        update: (arr, idx, opts) => {
+            const newArr = arr.slice();
+            newArr[idx] = Object.assign({}, arr[idx], opts)
+            return newArr;
+        },
+        add: (arr, idx, opts) => {
+            const newArr = arr.slice();
+            newArr.splice(idx, 0, opts);
+            return newArr;
+        },
+        remove: (arr, idx) => {
+            const newArr = arr.slice();
+            newArr.splice(idx, 1);
+            return newArr;
+        }
     }
 };

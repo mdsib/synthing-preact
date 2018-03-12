@@ -1,5 +1,6 @@
+const BUF_SIZE = 256;
 export default {
-    BUF_SIZE: 256,
+    BUF_SIZE,
     adsrProperties: [
         {
             name: 'attack',
@@ -20,5 +21,8 @@ export default {
             suffix: 's',
             maxVal: 30,
         }
-    ]
+    ],
+    initialWave: new Array(BUF_SIZE)
+        .fill(0)
+        .map((val, i) => Math.sin(i / BUF_SIZE * Math.PI * 2))
 }
