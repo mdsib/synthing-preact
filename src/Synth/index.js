@@ -35,11 +35,15 @@ export default class Synth extends Component {
    }
 }
 
+const taperOff = (length, val, i) => {
+    return val * (1 - Math.pow(i / length, 0.5));
+}
+
 function updateAudio(waveform) {
     FFT.forward(waveform);
     const periodicWave = ac.createPeriodicWave(
-        new Float32Array(FFT.real),
-        new Float32Array(FFT.imag)
+        new Float32Array(FFT.real.map(taperOff.bind(null, FFT.real.length))),
+        new Float32Array(FFT.imag.map(taperOff.bind(null, FFT.imag.length)))
     );
     P.changeWave(periodicWave);
 }

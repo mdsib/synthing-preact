@@ -222,26 +222,6 @@ class App extends Component {
         })
     }
 
-    //TODO this could be part of the reducer, and sending PLAY action can start it. Wonder how that can be done without side effects? Or if it should.
-    metro = () => {
-        this.props.setPlaying(true);
-        const loop = () => {
-            if (this.props.playing) {
-                this.props.setBeat((this.props.beat + 1) % this.props.numBeats);
-                window.setTimeout(loop, (1 / this.props.bpm) * 60000);
-            }
-        }
-        // give redux a chance to convey it's playing, a good sign of a bad design.
-        // i like this https://medium.com/@machadogj/timers-in-react-with-redux-apps-9a5a722162e8#Timers in Actions
-        window.setTimeout(loop, 0);
-    }
-
-    stopMetro = () => {
-        //TODO this could be one action handler called STOP, rather than composing everything manually like this.
-        this.props.setBeat(0);
-        this.props.setPlaying(false);
-    }
-
     keyHandler(e) {
         //TODO handle global commands, maybe some modal stuff even wow
         console.log('wow i got through', e.key);
@@ -310,14 +290,14 @@ class App extends Component {
                 <div class="global-controls">
                     <CircleButton
                         active={this.props.playing}
-                        action={this.metro}
+                        action={this.props.startMetro}
                         disabled={this.props.playing}
                     >
                         <div class="triangle"></div>
                     </CircleButton>
                     <CircleButton
                         active={!this.props.playing}
-                        action={this.stopMetro}
+                        action={this.props.stopMetro}
                     >
                         <div class="rectangle"></div>
                     </CircleButton>
