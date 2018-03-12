@@ -3,7 +3,6 @@ import WaveEditor from '../WaveEditor/';
 import WaveManager from '../WaveManager/';
 import Synth from '../Synth/';
 import CircleButton from '../CircleButton/';
-import WaveTable from '../WaveTable/';
 import HSlider from '../HSlider/';
 import Param from '../Param/';
 import Wheel from '../Wheel/';
@@ -11,7 +10,6 @@ import './App.css';
 import '../iconfont/style.css';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
-import { Provider, connect } from 'preact-redux';
 
 const initialWave = new Array(consts.BUF_SIZE)
     .fill(0)
