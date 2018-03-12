@@ -10,7 +10,8 @@ const ConnectedApp = connect(state => state, {
     setVolume: (newVal) => ({type: 'SET_GLOBAL_VOLUME', value: newVal}),
     setBpm: (newVal) => ({type: 'SET_GLOBAL_BPM', value: newVal}),
     setBeat: (newVal) => ({type: 'SET_GLOBAL_BEAT', value: newVal}),
-    setPlaying: (newVal) => ({type: 'SET_GLOBAL_PLAYING', value: newVal})
+    setPlaying: (newVal) => ({type: 'SET_GLOBAL_PLAYING', value: newVal}),
+    setNumBeats: (newVal) => ({type: 'SET_GLOBAL_NUM_BEATS', value: newVal})
 })(App);
 
 const InformedApp = <Provider store={store}><ConnectedApp /></Provider>;

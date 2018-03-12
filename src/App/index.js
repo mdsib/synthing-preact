@@ -96,7 +96,6 @@ const Adsr = (props) => (
 class App extends Component {
     constructor() {
         super();
-        let initBeats = 4;
         this.state = {
             tones: [{
                 active: true,
@@ -104,9 +103,8 @@ class App extends Component {
                 mix: 0.7,
                 mute: false,
                 solo: false,
-                beats: boolArray.update(boolArray.create(initBeats), 0, true)
+                beats: boolArray.update(boolArray.create(4), 0, true)
             }],
-            numBeats: initBeats,
             editingToneIdx: 0,
             adsr: {
                 attack: 0.3,
@@ -194,7 +192,7 @@ class App extends Component {
     ) => {
         const tones = immObjArray.add(this.state.tones, at, {
             waveform,
-            beats: boolArray.create(this.state.numBeats),
+            beats: boolArray.create(this.props.numBeats),
             mix: 0.7,
             mute: false,
             solo: false
@@ -213,8 +211,8 @@ class App extends Component {
 
     setBeats = (newNumBeats) => {
         newNumBeats = Math.max(newNumBeats, 1);
+        this.props.setNumBeats(newNumBeats);
         this.setState({
-            numBeats: newNumBeats,
             tones: this.state.tones.map((val, idx) => {
                 let ret = Object.assign({}, val, {
                     beats: boolArray.setLength(val.beats, newNumBeats)
@@ -229,8 +227,7 @@ class App extends Component {
         this.props.setPlaying(true);
         const loop = () => {
             if (this.props.playing) {
-                console.log('playing');
-                this.props.setBeat((this.props.beat + 1) % this.state.numBeats);
+                this.props.setBeat((this.props.beat + 1) % this.props.numBeats);
                 window.setTimeout(loop, (1 / this.props.bpm) * 60000);
             }
         }
@@ -338,7 +335,7 @@ class App extends Component {
                         minVal="1"
                         maxVal={16}
                         step="1"
-                        val={this.state.numBeats}
+                        val={this.props.numBeats}
                         update={this.setBeats}
                     />
                     <Adsr adsr={this.state.adsr} update={this.updateAdsr} />

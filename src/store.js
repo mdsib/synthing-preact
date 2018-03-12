@@ -4,7 +4,8 @@ const initialState = {
     volume: 0.7,
     bpm: 120,
     beat: 0,
-    playing: false
+    playing: false,
+    numBeats: 4
 };
 
 const reducer = (state, action) => {
@@ -21,6 +22,9 @@ const reducer = (state, action) => {
         break;
     case 'SET_GLOBAL_PLAYING':
         updates.playing = action.value;
+        break;
+    case 'SET_GLOBAL_NUM_BEATS':
+        updates.numBeats = action.value;
         break;
     }
     return Object.assign({}, state, updates);
