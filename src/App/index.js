@@ -6,6 +6,7 @@ import CircleButton from '../CircleButton/';
 import HSlider from '../HSlider/';
 import Param from '../Param/';
 import Wheel from '../Wheel/';
+import Help from '../Help/';
 import './App.css';
 import '../iconfont/style.css';
 import consts from '../consts.js';
@@ -179,6 +180,7 @@ class App extends Component {
                     volume={this.props.volume}
                     adsr={this.props.adsr}
                 ></Synth>
+                <Help />
             </div>
         );
     }

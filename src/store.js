@@ -11,6 +11,7 @@ const initialState = {
     playing: false,
     numBeats,
     editingToneIdx: 0,
+    helpOpen: false,
     adsr: {
         attack: 0.3,
         decay: 1,
@@ -132,6 +133,9 @@ const globalReducer = (state, action) => {
                 // min length of tones array should be 2 before a delete...
                 state.tones.length - 2
             );
+            break;
+        case 'SET_HELP_OPEN':
+            updates.helpOpen = action.value;
             break;
         default:
             break;
