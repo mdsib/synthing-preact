@@ -7,6 +7,7 @@ import HSlider from '../HSlider/';
 import Param from '../Param/';
 import Wheel from '../Wheel/';
 import Help from '../Help/';
+import Keybindings from '../Keybindings/';
 import './App.css';
 import '../iconfont/style.css';
 import consts from '../consts.js';
@@ -178,6 +179,7 @@ class App extends Component {
                     adsr={this.props.adsr}
                 ></Synth>
                 <Help />
+                <Keybindings />
             </div>
         );
     }

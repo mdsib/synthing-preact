@@ -137,6 +137,9 @@ const globalReducer = (state, action) => {
         case 'SET_HELP_OPEN':
             updates.helpOpen = action.value;
             break;
+        case 'TOGGLE_HELP_OPEN':
+            updates.helpOpen = !state.helpOpen;
+            break;
         default:
             break;
     }
