@@ -11,7 +11,16 @@ export default {
     partial,
     oneTime,
     linear: (m, x, b) => (m * x) + b,
-    bounded: (val, min, max) => val < min ? min : (val > max ? max : val),
+    bounded: (val, min, max) => {
+        if (min !== undefined && min !== null && val < min) {
+            return min;
+        }
+        else if (max !== undefined && max !== null && val > max) {
+            return max;
+        }
+        else
+            return val;
+    },
     scale: (buf, amt) => buf.map(val => val * amt),
     add: (arr1, arr2) => arr1.map((v, i) => v + arr2[i]),
     soon: (fn, ms=0) => {

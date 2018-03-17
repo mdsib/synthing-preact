@@ -22,7 +22,6 @@ const Adsr = (props) => (
                 name={aspect.name}
                 minVal={0}
                 maxVal={aspect.maxVal}
-                step={0.1}
                 update={(newVal) => {props.update(aspect.name, newVal)}}
                 >
                 <Wheel percent={props.adsr[aspect.name] / aspect.maxVal} />
@@ -123,7 +122,7 @@ class App extends Component {
         })
         return (
             <div
-                className="App"
+                class="App"
                 onKeyDown={this.keyHandler}
             >
                 <div>
@@ -156,7 +155,6 @@ class App extends Component {
                         name="bpm"
                         minVal={20}
                         maxVal={600}
-                        step={1}
                         val={this.props.bpm}
                         update={this.props.setBpm}
                     />
@@ -164,7 +162,6 @@ class App extends Component {
                         name="beats"
                         minVal={3}
                         maxVal={16}
-                        step="1"
                         val={this.props.numBeats}
                         update={this.props.setNumBeats}
                     />
