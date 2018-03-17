@@ -121,7 +121,7 @@ class App extends Component {
                 ></WaveManager>
             );
         })
-        return (
+        const Synthing = (
             <div
                 class="App"
                 onKeyDown={this.keyHandler}
@@ -182,7 +182,18 @@ class App extends Component {
                 <Keybindings />
             </div>
         );
+        const MobileBlockade = (
+            <div>
+                <h1>Visit Synthing on your laptop or desktop</h1>
+                <h2>Or borrow one from a friend and use it together</h2>
+                <h3>Synthing requires a mouse and a hardware keyboard for now</h3>
+                <h4>Thanks {":)"}</h4>
+            </div>
+        );
+        // I'm sorry, but I must sniff. It's not about screen size, it's about the hardware.
+        return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i
+            .test(navigator.userAgent) ? MobileBlockade : Synthing;
     }
-}
+};
 
 export default App;
