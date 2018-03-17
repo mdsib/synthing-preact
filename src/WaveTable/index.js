@@ -1,4 +1,4 @@
-import { h, Component} from 'preact';
+import { h, Component } from 'preact';
 import helpers from '../helpers';
 import consts from '../consts';
 import './style.css';
@@ -33,8 +33,9 @@ export default class WaveTable extends Component {
         }
         if (this.props.resize) {
             window.addEventListener('resize', (ev) => {
+                drawArea(this.props.waveform, this.canvasRef);
                 this.forceUpdate();
-            })
+            });
         }
     }
     componentWillReceiveProps(newProps) {
