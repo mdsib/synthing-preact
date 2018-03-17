@@ -9,19 +9,22 @@ const drawArea = helpers.soon((amplitudes, canvas, begin = 0, end = undefined) =
     const roundedWidth = Math.max(1, rectWidth)
     const lineWidth = 1;
     const halfCanvas = (canvas.height - lineWidth) / 2;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
     amplitudes.forEach((amp, idx) => {
         amp *= halfCanvas;
         const roundedXOffset = Math.round(idx * rectWidth);
-        ctx.clearRect(roundedXOffset, 0, roundedWidth + 1, canvas.height);
-        ctx.fillStyle  = "#ff735e";
-        ctx.fillRect(roundedXOffset, halfCanvas, roundedWidth + 1, -amp);
+        ctx.rect(roundedXOffset, halfCanvas, roundedWidth + 1, -amp);
     });
+    ctx.fillStyle  = "#ff735e";
+    ctx.fill();
+    ctx.closePath();
 });
 
 export default class WaveTable extends Component {
     constructor() {
         super();
-        this.drawArea = helpers.throttle(drawArea, 30);
+        this.drawArea = helpers.throttle(drawArea, 20);
     }
     componentWillUpdate() {
         return this.props.resize;
@@ -44,12 +47,14 @@ export default class WaveTable extends Component {
     render() {
         const height = this.props.height || 400;
         const width = this.props.width || window.innerWidth - 100;
+        const pixelHeight = height * window.devicePixelRatio;
+        const pixelWidth = width * window.devicePixelRatio;
         return (
             <canvas
                 class="wave-table"
                 style={`${this.props.myStyle}; color: red; height: ${height}px; width: ${width}px`}
-                height={height}
-                width={width}
+                height={pixelHeight}
+                width={pixelWidth}
                 ref={(canvas) => {this.canvasRef = canvas}}>
             </canvas>
         );
