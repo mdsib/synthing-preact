@@ -6,6 +6,8 @@ import CircleButton from '../CircleButton/';
 import HSlider from '../HSlider/';
 import Param from '../Param/';
 import Wheel from '../Wheel/';
+import Help from '../Help/';
+import Keybindings from '../Keybindings/';
 import './App.css';
 import '../iconfont/style.css';
 import consts from '../consts.js';
@@ -21,7 +23,6 @@ const Adsr = (props) => (
                 name={aspect.name}
                 minVal={0}
                 maxVal={aspect.maxVal}
-                step={0.1}
                 update={(newVal) => {props.update(aspect.name, newVal)}}
                 >
                 <Wheel percent={props.adsr[aspect.name] / aspect.maxVal} />
@@ -122,7 +123,7 @@ class App extends Component {
         })
         return (
             <div
-                className="App"
+                class="App"
                 onKeyDown={this.keyHandler}
             >
                 <div>
@@ -155,7 +156,6 @@ class App extends Component {
                         name="bpm"
                         minVal={20}
                         maxVal={600}
-                        step={1}
                         val={this.props.bpm}
                         update={this.props.setBpm}
                     />
@@ -163,7 +163,6 @@ class App extends Component {
                         name="beats"
                         minVal={3}
                         maxVal={16}
-                        step="1"
                         val={this.props.numBeats}
                         update={this.props.setNumBeats}
                     />
@@ -179,6 +178,8 @@ class App extends Component {
                     volume={this.props.volume}
                     adsr={this.props.adsr}
                 ></Synth>
+                <Help />
+                <Keybindings />
             </div>
         );
     }

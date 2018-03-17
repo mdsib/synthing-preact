@@ -4,25 +4,34 @@ import './style.css';
 
 export default class Param extends Component {
     componentDidMount() {
-        const handleMove = (ev) => {
-            let step = this.props.step || 0.5;
-            let newVal = this.props.val - (ev.movementY * step);
-            if (typeof(this.props.minVal) === 'number' && (newVal < this.props.minVal)) {
-                newVal = this.props.minVal;
-            } else if (typeof(this.props.maxVal) === 'number' && (newVal > this.props.maxVal)) {
-                newVal = this.props.maxVal;
-            }
-            this.props.update(newVal);
+        const setUpMove = () => {
+            this.internalVal = this.props.val;
         }
-        helpers.clickNDrag(this.paramRef, null, handleMove, null);
+        const handleMove = (ev) => {
+            // calculate how much to adjust the value given the
+            // min and max values of the param, the speed of the mouse movement,
+            // and the precision of the param.
+            const maxMov = 300 / (this.props.precision ? this.props.precision + 1 : 1);
+            const ratioMov = ev.movementY / maxMov;
+            const expRatioMov = -Math.sign(ratioMov) * Math.pow(Math.abs(ratioMov), 1.3);
+            const newVal = (expRatioMov * (this.props.maxVal - this.props.minVal)) + this.internalVal;
+            this.internalVal = helpers.bounded(
+                newVal,
+                this.props.minVal,
+                this.props.maxVal
+            );
+            this.props.update(Number(this.internalVal.toFixed(this.props.precision)));
+        }
+        helpers.clickNDrag(this.paramRef, setUpMove, handleMove, null);
     }
     handleChange(e) {
         this.props.update(e.target.value);
     }
     getNumString() {
-        return (this.props.precision ?
-            this.props.val.toFixed(this.props.precision) :
-                this.props.val) + (this.props.suffix || '');
+        return (this.props.precision !== undefined && this.props.val.toFixed
+              ? this.props.val.toFixed(this.props.precision)
+              : this.props.val)
+             + (this.props.suffix || '');
     }
     render() {
         const inputId = `param-${this.props.name}`;

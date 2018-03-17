@@ -52,7 +52,6 @@ export default class WaveManager extends Component {
                 <div class="beats">
                     <div onClick={this.props.activate}>
                         <WaveTable
-                            resize={true}
                             height={40}
                             width={75}
                             waveform={this.props.tone.waveform.slice()}

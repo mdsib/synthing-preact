@@ -1,0 +1,49 @@
+.help-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.help-container {
+    box-sizing: border-box;
+    background: aqua;
+    padding: 30px 60px;
+    margin: 30px;
+    overflow-y: auto;
+    max-height: calc(100vh - 60px);
+    max-width: 900px;
+}
+
+.help-tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: aqua;
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    border-radius: 9999px;
+    height: 2em;
+    width: 2em;
+    z-index: 100;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.help-tag:hover {
+    opacity: 1;
+}
+
+.keyboard {
+    width: 100%;
+}
+
+* {
+    text-align: left;
+}
