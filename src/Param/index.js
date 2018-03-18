@@ -37,13 +37,15 @@ export default class Param extends Component {
         const inputId = `param-${this.props.name}`;
         return (
             <div class="param" ref={(param) => {this.paramRef = param}}>
-                <label for={inputId}>{this.props.name}</label>
-                <input
-                    type="text"
-                    id={inputId}
-                    value={this.getNumString()}
-                    onChange={this.handleChange}
-                ></input>
+                <div class="input-container">
+                    <label for={inputId}>{this.props.name}</label>
+                    <input
+                        type="text"
+                        id={inputId}
+                        value={this.getNumString()}
+                        onChange={this.handleChange}
+                    ></input>
+                </div>
                 {this.props.children}
             </div>
         )

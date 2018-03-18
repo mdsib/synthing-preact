@@ -1,8 +1,8 @@
 .param {
     position: relative;
-    display: inline-block;
-    padding: 10px;
-    padding-right: 46px;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 5px;
     box-sizing: border-box;
 }
 
@@ -25,9 +25,12 @@
     font-size: 16px;
     text-align: center;
 }
+.param .input-container {
+    margin: 0 5px;
+    position: relative;
+    top: -2px;
+}
 
 .param > canvas {
-    position: absolute;
-    right: 5px;
-    top: 15px;
+    position: relative;
 }

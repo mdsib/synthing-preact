@@ -16,7 +16,14 @@ export default connect(state => ({open: state.helpOpen}), {setHelpOpen})((props)
                     <div class="help-container">
                         <h1>Help</h1>
                         <h2>Keybindings</h2>
-                        <img class="keyboard" src="../../AudioKeys/images/audiokeys-mapping-rows1.jpg" />
+                        <p>Credit to AudioKeys for the image below. Velocity does nothing:</p>
+                        <a href="../../AudioKeys/images/audiokeys-mapping-rows1.jpg" target="_blank">
+                            <img class="keyboard" src="../../AudioKeys/images/audiokeys-mapping-rows1.jpg" />
+                            (Click to view full-size)
+                        </a>
+                        <p>
+                            Additionally, pressing '?' will open/close this window.
+                        </p>
                         <h2>About</h2>
                         Synthing allows you to experiment with and visualize a waveform's effect on generated sound. Works best in Chrome.
                         <h2>Overview</h2>

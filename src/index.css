@@ -56,10 +56,57 @@ h1 {
 }
 
 .global-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
     background: #f1ddd8;
+    padding: 10px;
+    margin: 15px 0;
+}
+
+.play-container, .adsr-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.adsr-container {
+    padding-right: 10px;
+}
+
+.adsr-container .adsr {
+
 }
 
 .global-controls .circle {
     font-size: 35px;
 }
 
+.global-controls .adsr {
+    align-self: right;
+}
+
+@media screen and (max-width: 882px) {
+    .global-controls > div {
+        align-items: center;
+        justify-content: center;
+        flex-grow: 1;
+    }
+}
+@media screen and (max-width: 660px) {
+    .adsr {
+        display: inline-block;
+    }
+    .adsr > * {
+        float: left;
+    }
+    body {
+        margin: 10px;
+    }
+}
+@media screen and (max-width: 580px) {
+    .adsr > *:nth-child(2n+1) {
+        clear: left;
+    }
+}

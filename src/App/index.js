@@ -14,7 +14,7 @@ import consts from '../consts.js';
 import helpers from '../helpers.js';
 
 const Adsr = (props) => (
-    <div style="display: inline-block;">
+    <div class="adsr">
         {consts.adsrProperties.map((aspect) => (
             <Param
                 suffix={aspect.suffix || ''}
@@ -138,36 +138,40 @@ class App extends Component {
                     }}
                 ></WaveEditor>
                 <div class="global-controls">
-                    <CircleButton
-                        active={this.props.playing}
-                        action={this.props.startMetro}
-                        disabled={this.props.playing}
-                    >
-                        <div class="triangle"></div>
-                    </CircleButton>
-                    <CircleButton
-                        active={!this.props.playing}
-                        action={this.props.stopMetro}
-                    >
-                        <div class="rectangle"></div>
-                    </CircleButton>
-                    <Param
-                        precision={0}
-                        name="bpm"
-                        minVal={20}
-                        maxVal={600}
-                        val={this.props.bpm}
-                        update={this.props.setBpm}
-                    />
-                    <Param
-                        name="beats"
-                        minVal={3}
-                        maxVal={16}
-                        val={this.props.numBeats}
-                        update={this.props.setNumBeats}
-                    />
-                    <Adsr adsr={this.props.adsr} update={this.props.setAdsrProperty} />
-                    <HSlider value={this.props.volume} update={this.props.setVolume} />
+                    <div class="play-container">
+                        <CircleButton
+                            active={this.props.playing}
+                            action={this.props.startMetro}
+                            disabled={this.props.playing}
+                        >
+                            <div class="triangle"></div>
+                        </CircleButton>
+                        <CircleButton
+                            active={!this.props.playing}
+                            action={this.props.stopMetro}
+                        >
+                            <div class="rectangle"></div>
+                        </CircleButton>
+                        <Param
+                            precision={0}
+                            name="bpm"
+                            minVal={20}
+                            maxVal={600}
+                            val={this.props.bpm}
+                            update={this.props.setBpm}
+                        />
+                        <Param
+                            name="beats"
+                            minVal={3}
+                            maxVal={16}
+                            val={this.props.numBeats}
+                            update={this.props.setNumBeats}
+                        />
+                    </div>
+                    <div class="adsr-container">
+                        <Adsr adsr={this.props.adsr} update={this.props.setAdsrProperty} />
+                        <HSlider value={this.props.volume} update={this.props.setVolume} />
+                    </div>
                 </div>
                 <div class="wave-manager-container">
                     {tones}

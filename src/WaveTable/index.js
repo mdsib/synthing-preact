@@ -46,7 +46,7 @@ export default class WaveTable extends Component {
     }
     render() {
         const height = this.props.height || 400;
-        const width = this.props.width || window.innerWidth - 100;
+        const width = this.props.width || document.getElementsByTagName('body')[0].clientWidth;
         const pixelHeight = height * window.devicePixelRatio;
         const pixelWidth = width * window.devicePixelRatio;
         return (
