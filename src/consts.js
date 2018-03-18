@@ -24,5 +24,6 @@ export default {
     ],
     initialWave: new Array(BUF_SIZE)
         .fill(0)
-        .map((val, i) => Math.sin(i / BUF_SIZE * Math.PI * 2))
+        .map((val, i) => Math.sin(i / BUF_SIZE * Math.PI * 2)),
+    MAX_BEATS: 16
 }

@@ -57,8 +57,7 @@ export default class WaveManager extends Component {
                             waveform={this.props.tone.waveform.slice()}
                         />
                     </div>
-
-                    {this.props.tone.beats.map((val, idx) => {
+                    {this.props.tone.beats.slice(0, this.props.numBeats).map((val, idx) => {
                          return (
                              <CheckBox
                                  class={this.props.beat === idx ? 'beat' : ''}

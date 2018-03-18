@@ -3,13 +3,21 @@ import thunk from 'redux-thunk';
 import consts from './consts.js';
 import helpers from './helpers.js';
 
-const numBeats = 4;
+const toneShape = {
+    active: false,
+    waveform: consts.initialWave,
+    mix: 0.7,
+    mute: false,
+    solo: false,
+    beats: helpers.boolArray.create(consts.MAX_BEATS)
+};
+
 const initialState = {
     volume: 0.7,
     bpm: 120,
     beat: 0,
     playing: false,
-    numBeats,
+    numBeats: consts.MAX_BEATS,
     editingToneIdx: 0,
     helpOpen: false,
     adsr: {
@@ -18,24 +26,12 @@ const initialState = {
         sustain: 0.4,
         release: 1
     },
-    tones: [{
+    tones: [Object.assign({}, toneShape, {
         active: true,
-        waveform: consts.initialWave.slice(),
-        mix: 0.7,
-        mute: false,
-        solo: false,
-        beats: helpers.boolArray.update(helpers.boolArray.create(numBeats), 0, true)
-    }],
+        beats: helpers.boolArray.update(helpers.boolArray.create(consts.MAX_BEATS), 0, true)
+    })],
 };
 
-const newTone = {
-    active: false,
-    waveform: consts.initialWave.slice(),
-    mix: 0.7,
-    mute: false,
-    solo: false,
-    beats: helpers.boolArray.create(numBeats)
-};
 
 const adsrReducer = (state, action) => {
     const updates = {};
@@ -69,7 +65,7 @@ const tonesReducer = (state = [], action) => {
             return helpers.immObjArray.add(
                 state,
                 idx,
-                Object.assign({}, newTone, newToneProps)
+                Object.assign({}, toneShape, newToneProps)
             );
         case 'SET_TONE_PROPERTY':
             // idx: required
@@ -85,14 +81,6 @@ const tonesReducer = (state = [], action) => {
         case 'DELETE_TONE':
             // idx: required
             return helpers.immObjArray.remove(state, action.idx);
-        case 'SET_GLOBAL_NUM_BEATS':
-            // TODO save beats and just change the view, instead of deleting them
-            return state.map((val, idx) => {
-                let ret = Object.assign({}, val, {
-                    beats: helpers.boolArray.setLength(val.beats, action.value)
-                });
-                return ret;
-            });
         default:
             return state;
     }

@@ -8,6 +8,7 @@ import Param from '../Param/';
 import Wheel from '../Wheel/';
 import Help from '../Help/';
 import Keybindings from '../Keybindings/';
+import WaveTable from '../WaveTable/';
 import './App.css';
 import '../iconfont/style.css';
 import consts from '../consts.js';
@@ -99,6 +100,7 @@ class App extends Component {
                     activated={idx === this.props.editingToneIdx}
                     tone={this.props.tones[idx]}
                     beat={this.props.beat}
+                    numBeats={this.props.numBeats}
                     toggleMute={() => {
                             this.props.setToneProperty(idx, 'mute', !this.props.tones[idx].mute);
                     }}
