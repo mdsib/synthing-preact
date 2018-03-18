@@ -17,7 +17,7 @@ const initialState = {
     bpm: 120,
     beat: 0,
     playing: false,
-    numBeats: consts.MAX_BEATS,
+    numBeats: 4,
     editingToneIdx: 0,
     helpOpen: false,
     adsr: {
