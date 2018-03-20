@@ -62,7 +62,7 @@ class App extends Component {
         const runningAverage = (curVal, valToAdd, iteration) =>
             (((curVal * iteration) + valToAdd) / (iteration + 1));
         const firstTone = tones.shift();
-        return tones.reduce(
+        const w = tones.reduce(
             (totalWaveform, currTone, i) => (
                 totalWaveform.map(
                     (val, j) => (
@@ -77,6 +77,7 @@ class App extends Component {
             ),
             helpers.scale(firstTone.waveform, firstTone.mix)
         );
+        return helpers.scale(w, 1 / w.reduce((l, r) => Math.max(Math.abs(l), Math.abs(r))));
     }
 
     keyHandler(e) {
@@ -129,8 +130,12 @@ class App extends Component {
                 onKeyDown={this.keyHandler}
             >
                 <div>
-                    <h1>synthing
-                    </h1>
+                    <h1 id="synthing-title"> synthing </h1>
+                    <div class="total-wave">
+                       <WaveTable width={100} height={50} waveform={this.totalWaveform()} />
+                       <WaveTable width={100} height={50} waveform={this.totalWaveform()} />
+                       <WaveTable width={100} height={50} waveform={this.totalWaveform()} />
+                    </div>
                 </div>
                 <WaveEditor
                     mouseData={this.state.mouseData}

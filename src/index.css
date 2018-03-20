@@ -87,6 +87,21 @@ h1 {
     align-self: right;
 }
 
+.total-wave {
+    position: absolute;
+    top: 15px;
+    right: 50px
+}
+
+@keyframes wiggle {
+    from {
+        margin-left: -200px;
+    }
+    to {
+        margin-left: -100px;
+    }
+}
+
 @media screen and (max-width: 882px) {
     .global-controls > div {
         align-items: center;
