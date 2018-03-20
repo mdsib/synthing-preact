@@ -74,7 +74,7 @@ export default class waveEditor extends Component {
                 class="wave-editor"
                 ref={(div) => {this.divRef = div}}
             >
-                <WaveTable resize={true} waveform={this.props.waveform} />
+                <WaveTable waveform={this.props.waveform} />
             </div>
         );
     }

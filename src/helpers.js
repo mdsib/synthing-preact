@@ -27,13 +27,21 @@ export default {
         return (...args) =>
         window.setTimeout(partial(fn, ...args), ms);
     },
-    throttle: (fn, ms) => {
+    throttle: (fn, ms, performFinalCall) => {
         let time = 0;
+        let finalCall = null;
         return (...args) => {
             let now = Date.now();
+            if (finalCall)
+                window.clearTimeout(finalCall);
             if (now >= time + ms) {
                 fn(...args);
                 time = now;
+            }
+            else if (performFinalCall) {
+                finalCall = window.setTimeout(() => {
+                    fn(...args);
+                }, time - now - ms);
             }
         }
     },

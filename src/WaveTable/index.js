@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import helpers from '../helpers';
 import consts from '../consts';
+import UpdateOnResize from '../UpdateOnResize/';
 import './style.css';
 
 const drawArea = helpers.soon((amplitudes, canvas, begin = 0, end = undefined) => {
@@ -24,39 +25,37 @@ const drawArea = helpers.soon((amplitudes, canvas, begin = 0, end = undefined) =
 export default class WaveTable extends Component {
     constructor() {
         super();
-        this.drawArea = helpers.throttle(drawArea, 20);
+        this.myDrawArea = helpers.throttle(() => {
+            drawArea(this.props.waveform, this.canvasRef);
+        }, 20, true);
     }
-    componentWillUpdate() {
-        return this.props.resize;
-    }
+
     componentDidMount() {
-        this.drawArea(this.props.waveform, this.canvasRef);
+        this.myDrawArea(this.props.waveform, this.canvasRef);
         if (this.props.setCanvasRef) {
             this.props.setCanvasRef(this.canvasRef);
         }
-        if (this.props.resize) {
-            window.addEventListener('resize', (ev) => {
-                drawArea(this.props.waveform, this.canvasRef);
-                this.forceUpdate();
-            });
-        }
     }
-    componentWillReceiveProps(newProps) {
-        this.drawArea(newProps.waveform, this.canvasRef);
+
+    componentDidUpdate() {
+        this.myDrawArea();
     }
+
     render() {
         const height = this.props.height || 400;
         const width = this.props.width || document.getElementsByTagName('body')[0].clientWidth;
         const pixelHeight = height * window.devicePixelRatio;
         const pixelWidth = width * window.devicePixelRatio;
         return (
-            <canvas
-                class="wave-table"
-                style={`${this.props.myStyle}; color: red; height: ${height}px; width: ${width}px`}
-                height={pixelHeight}
-                width={pixelWidth}
-                ref={(canvas) => {this.canvasRef = canvas}}>
-            </canvas>
+            <UpdateOnResize action={this.forceUpdate.bind(this)}>
+                <canvas
+                    class="wave-table"
+                    style={`${this.props.myStyle}; height: ${height}px; width: ${width}px;`}
+                    height={pixelHeight}
+                    width={pixelWidth}
+                    ref={(canvas) => {this.canvasRef = canvas}}>
+                </canvas>
+            </UpdateOnResize>
         );
     }
 }
