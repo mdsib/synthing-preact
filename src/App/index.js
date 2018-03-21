@@ -131,10 +131,12 @@ class App extends Component {
             >
                 <div>
                     <h1 id="synthing-title"> synthing </h1>
-                    <div class="total-wave">
-                       <WaveTable width={100} height={50} waveform={this.totalWaveform()} />
-                       <WaveTable width={100} height={50} waveform={this.totalWaveform()} />
-                       <WaveTable width={100} height={50} waveform={this.totalWaveform()} />
+                    <div class="wave-scroller">
+                        <div class={`total-wave${this.props.playing ? ' -move' : ''}`}>
+                            <WaveTable width={100} height={50} waveform={this.totalWaveform()} />
+                            <WaveTable width={100} height={50} waveform={this.totalWaveform()} />
+                            <WaveTable width={100} height={50} waveform={this.totalWaveform()} />
+                        </div>
                     </div>
                 </div>
                 <WaveEditor
