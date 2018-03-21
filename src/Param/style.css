@@ -31,6 +31,7 @@
     top: -2px;
 }
 
-.param > canvas {
+.param .wheel {
     position: relative;
+    top: 3px;
 }
