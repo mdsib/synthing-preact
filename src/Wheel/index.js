@@ -15,12 +15,12 @@ const drawCircle = (canvas, percent) => {
     context.strokeStyle = "#00000011";
 
     if (percent === 0) {
-        context.arc(radius, radius, innerRadius, 0, Math.PI);
+        context.arc(radius, radius, innerRadius, 0, 2 * Math.PI);
         context.stroke();
     }
     else {
-        const begin = -(Math.PI / 2);
-        const end = 2 * Math.PI * percent - Math.PI / 2;
+        const begin = -(Math.PI * 3/2);
+        const end = 2 * Math.PI * percent - Math.PI * 3/2;
 
         context.arc(radius, radius, innerRadius, end, begin);
         context.stroke();
