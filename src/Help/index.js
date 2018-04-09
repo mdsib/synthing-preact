@@ -2,6 +2,7 @@ import { h } from 'preact';
 import { connect } from 'preact-redux';
 import ClickOutside from '../ClickOutside/';
 import './Help.css';
+import keymapping from '../../AudioKeys/images/audiokeys-mapping-rows1.jpg';
 
 const setHelpOpen = (value) => ({type: 'SET_HELP_OPEN', value});
 
@@ -17,8 +18,8 @@ export default connect(state => ({open: state.helpOpen}), {setHelpOpen})((props)
                         <h1>Help</h1>
                         <h2>Keybindings</h2>
                         <p>Credit to AudioKeys for the image below. Velocity does nothing:</p>
-                        <a href="../../AudioKeys/images/audiokeys-mapping-rows1.jpg" target="_blank">
-                            <img class="keyboard" src="../../AudioKeys/images/audiokeys-mapping-rows1.jpg" />
+                        <a href={keymapping} target="_blank">
+                            <img class="keyboard" src={keymapping} />
                             (Click to view full-size)
                         </a>
                         <p>

@@ -17,13 +17,13 @@ export default class WaveManager extends Component {
                                 class="item"
                                 onClick={this.props.remove}
                             >
-                                <span class="icon-ex"></span>
+                                <span class="icon icons-ex"></span>
                             </button>
                             <button
                                 class="item"
                                 onClick={this.props.duplicate}
                             >
-                                <span class="icon-dupe"></span>
+                                <span class="icon icons-dupe"></span>
                             </button>
                         </div>
                     </div>

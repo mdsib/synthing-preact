@@ -10,7 +10,7 @@ import Help from '../Help/';
 import Keybindings from '../Keybindings/';
 import WaveTable from '../WaveTable/';
 import './App.css';
-import '../iconfont/style.css';
+import '../iconfont/icons.css';
 import consts from '../consts.js';
 import helpers from '../helpers.js';
 

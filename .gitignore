@@ -4,7 +4,8 @@
 node_modules
 
 # production
-build
+dist
+src/iconfont/*
 
 # misc
 .DS_Store

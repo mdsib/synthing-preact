@@ -22,7 +22,7 @@ export default class HSlider extends Component {
             <div class={`HSlider${this.props.class ? ' ' + this.props.class : ''}`} ref={(ref) => {this.volRef = ref}}>
                 {this.props.children.length
                  ? this.props.children
-                 : (<span class="icon-volume"></span>)
+                 : (<span class="icon icons-volume"></span>)
                 }
                 <div
                     class="hslider-triangle-container"
