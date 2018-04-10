@@ -16,7 +16,8 @@
         "react-test-renderer": "^15.3.0",
         "style-loader": "^0.20.3",
         "webpack": "^4.3.0",
-        "webpack-cli": "^2.0.13"
+        "webpack-cli": "^2.0.13",
+        "webpack-dev-server": "^3.1.3"
     },
     "dependencies": {
         "dsp.js": "^1.0.1",
@@ -30,7 +31,8 @@
     "scripts": {
         "prebuild:webpack": "mkdir -p src/iconfont && icon-font-generator src/icons/*.svg -o src/iconfont --tag \".icon\" && cp index.html dist/index.html",
         "build:webpack": "webpack",
-        "clean:webpack": "rm dist/* && rm src/iconfont/*"
+        "clean:webpack": "rm dist/* && rm src/iconfont/*",
+        "start:dev": "webpack-dev-server --hot"
     },
     "eslintConfig": {
         "extends": "./node_modules/preact-scripts/config/eslint.js"
