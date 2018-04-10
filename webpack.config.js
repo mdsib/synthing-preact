@@ -26,7 +26,11 @@ module.exports = {
             {
                 test: /\.css$/,
                 include: path.resolve(__dirname, 'src'),
-                use: ['style-loader', 'css-loader']
+                use: [
+                    'style-loader',
+                    {loader: 'css-loader', options: {importLoaders: 1}},
+                    'postcss-loader'
+                ]
             },
             {
                 test: /\.(ttf|woff2?|svg|eot|jpg)$/,
