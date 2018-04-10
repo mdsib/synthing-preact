@@ -185,7 +185,9 @@ class App extends Component {
                 <div class="wave-manager-container">
                     {tones}
                 </div>
-                <button onClick={() => this.props.addTone()}>+</button>
+                <button class="add-button" onClick={() => this.props.addTone()}>
+                    <span>+</span>
+                </button>
                 <Synth
                     waveform={this.totalWaveform()}
                     volume={this.props.volume}
